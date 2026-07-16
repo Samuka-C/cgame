@@ -31,7 +31,7 @@ public:
     /**
      * @brief use in:
      * ```
-     * if (windowA.loop_condition())
+     * while (windowA.loop_condition())
      * {
      *     loop methods...
      * }
