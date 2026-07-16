@@ -5,8 +5,9 @@ INCLUDE_DIRS := C:/msys64/ucrt64/include C:/glfw-3.4/include include
 INCLUDE := $(addprefix -I,$(INCLUDE_DIRS))
 
 LIBS := -lglfw3 -lopengl32 -lgdi32 -luser32 -lkernel32
+OBJECT_LIST := window.o logger.o glad.o color.o
 
-main$(EXE): main.o window.o logger.o glad.o
+main$(EXE): main.o $(OBJECT_LIST)
 	$(CXX) $(INCLUDE) $^ -o $@ $(LIBS)
 
 main.o: src/main.cpp
@@ -16,6 +17,9 @@ logger.o: src/Logger/logger.cpp
 	$(CXX) $(INCLUDE) -c $< -o $@
 
 window.o: src/UI/window.cpp
+	$(CXX) $(INCLUDE) -c $< -o $@
+
+color.o: src/Util/Color/color.cpp
 	$(CXX) $(INCLUDE) -c $< -o $@
 
 glad.o: src/glad.c

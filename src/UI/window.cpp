@@ -41,9 +41,13 @@ bool Window::loop_condition()
     return !glfwWindowShouldClose(glfw_window_ptr);
 }
 
-void Window::draw_background(float red, float green, float blue, float alpha)
+void Window::draw_background(Color color)
 {
-    glClearColor(red, green, blue, alpha);
+    glClearColor(
+        color.get_red_float(), 
+        color.get_green_float(), 
+        color.get_blue_float(), 
+        color.get_alpha_float());
     glClear(GL_COLOR_BUFFER_BIT);
 
     glfwSwapBuffers(glfw_window_ptr);

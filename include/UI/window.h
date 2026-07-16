@@ -3,6 +3,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <Util/Color/color.h>
 
 /**
  * @brief starts the glfw module, allowing the creation of windows
@@ -47,7 +48,7 @@ public:
      * @param blue red channel of the color from 0 to 1
      * @param alpha red channel of the color from 0 to 1
      */
-    void draw_background(float red, float green, float blue, float alpha);
+    void draw_background(Color color);
 
     /**
      * @brief polls keyboard and mouse events
