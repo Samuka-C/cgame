@@ -6,10 +6,16 @@ INCLUDE := $(addprefix -I,$(INCLUDE_DIRS))
 
 LIBS := -lglfw3 -lopengl32 -lgdi32 -luser32 -lkernel32
 
-main$(EXE): main.o glad.o
+main$(EXE): main.o window.o logger.o glad.o
 	$(CXX) $(INCLUDE) $^ -o $@ $(LIBS)
 
 main.o: src/main.cpp
+	$(CXX) $(INCLUDE) -c $< -o $@
+
+logger.o: src/Logger/logger.cpp
+	$(CXX) $(INCLUDE) -c $< -o $@
+
+window.o: src/UI/window.cpp
 	$(CXX) $(INCLUDE) -c $< -o $@
 
 glad.o: src/glad.c
