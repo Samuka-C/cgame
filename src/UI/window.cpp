@@ -6,10 +6,6 @@ static bool glfw_initialized = false;
 bool start_glfw()
 {
     glfwInit();
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-        return false;
-
     glfw_initialized = true;
     return true;
 }
@@ -32,4 +28,28 @@ Window::Window(const char* title, int width, int height)
     glfw_window_ptr = glfwCreateWindow(width, height, title, nullptr, nullptr);
 
     glfwMakeContextCurrent(glfw_window_ptr);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        log_error("Failed to load GL methods");
+        return;
+    }
+}
+
+bool Window::loop_condition()
+{
+    return !glfwWindowShouldClose(glfw_window_ptr);
+}
+
+void Window::draw_background(float red, float green, float blue, float alpha)
+{
+    glClearColor(red, green, blue, alpha);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glfwSwapBuffers(glfw_window_ptr);
+}
+
+void Window::pollEvents()
+{
+    glfwPollEvents();
 }

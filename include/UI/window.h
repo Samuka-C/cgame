@@ -27,17 +27,32 @@ private:
     GLFWwindow* glfw_window_ptr;
 public:
     Window(const char* title, int width, int height);
+
+    /**
+     * @brief use in:
+     * ```
+     * if (windowA.loop_condition())
+     * {
+     *     loop methods...
+     * }
+     * ```
+     */
+    bool loop_condition();
+
+    /**
+     * @brief draws a color in the background of the window
+     * 
+     * @param red red channel of the color from 0 to 1
+     * @param green red channel of the color from 0 to 1
+     * @param blue red channel of the color from 0 to 1
+     * @param alpha red channel of the color from 0 to 1
+     */
+    void draw_background(float red, float green, float blue, float alpha);
+
+    /**
+     * @brief polls keyboard and mouse events
+     */
+    void pollEvents();
 };
-
-/*
-while (!glfwWindowShouldClose(window))
-{
-    glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glfwSwapBuffers(window);
-    glfwPollEvents();
-}
-*/
 
 #endif
