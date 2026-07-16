@@ -1,30 +1,19 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
-#include <stdio.h>
+#include <UI/window.h>
+#include <Logger/logger.h>
 
 int main()
 {
-    glfwInit();
+    start_glfw();
 
-    GLFWwindow* window =
-        glfwCreateWindow(800, 600, "OpenGL", nullptr, nullptr);
+    Window new_window("test", 600, 800);
 
-    glfwMakeContextCurrent(window);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-        return -1;
-
-    while (!glfwWindowShouldClose(window))
+    while (new_window.loop_condition())
     {
-        glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        new_window.draw_background(0.2f, 0.3f, 0.8f, 1.0f);
+        new_window.pollEvents();
     }
 
-    glfwTerminate();
+    terminate_glfw();
 }
 
 
