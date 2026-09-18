@@ -2,6 +2,7 @@
 #include <Util/Color/color.h>
 
 #include <cstdint>
+#include <cmath>
 
 uint8_t from_float(float value)
 {
@@ -47,7 +48,22 @@ float to_float(uint8_t value)
     return (float)value / 0xFF;
 }
 
-Color::Color(int red, int green, int blue, int alpha)
+float fix_angle(float angle)
+{
+    while (angle < 0)
+    {
+        angle += 360;
+    }
+
+    while (angle > 360)
+    {
+        angle -= 360;
+    }
+
+    return angle;
+}
+
+Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
     R = from_int(red);
     G = from_int(green);
@@ -55,66 +71,127 @@ Color::Color(int red, int green, int blue, int alpha)
     A = from_int(alpha);
 }
 
-Color::Color(int red, int green, int blue)
+Color Color::fromRGB(int red, int green, int blue)
 {
-    R = from_int(red);
-    G = from_int(green);
-    B = from_int(blue);
-    A = (uint8_t)(0xFF);
+    return Color::fromRGB(red, green, blue, 255);
 }
 
-Color::Color(float red, float green, float blue, float alpha)
+Color Color::fromRGB(int red, int green, int blue, int alpha)
 {
-    R = from_float(red);
-    G = from_float(green);
-    B = from_float(blue);
-    A = from_float(alpha);
+    return Color(from_int(red), from_int(green), from_int(blue), from_int(alpha));
 }
 
-Color::Color(float red, float green, float blue)
+Color Color::fromRGB(float red, float green, float blue)
 {
-    R = from_float(red);
-    G = from_float(green);
-    B = from_float(blue);
-    A = (uint8_t)(0xFF);
+    return Color::fromRGB(red, green, blue, 1.0f);
 }
 
-int Color::get_red_int()
+Color Color::fromRGB(float red, float green, float blue, float alpha)
+{
+    return Color(from_float(red), from_float(green), from_float(blue), from_float(alpha));
+}
+
+Color Color::fromHSV(float hue, float saturation, float value)
+{
+    return Color::fromHSV(hue, saturation, value, 1.0f);
+}
+
+Color Color::fromHSV(float hue, float saturation, float value, float alpha)
+{
+    // based on formula found on https://www.rapidtables.com/convert/color/hsv-to-rgb.html
+
+    hue = fix_angle(hue);
+    
+    float red, green, blue;
+    float C = value * saturation;
+    float X = C * (1 - std::abs(std::fmod(hue / 60, 2) - 1));
+    float m = value - C;
+
+    if (hue >= 0 && hue < 60)
+    {
+        red = C;
+        green = X;
+        blue = 0;
+    }
+    else if (hue >= 60 && hue < 120)
+    {
+        red = X;
+        green = C;
+        blue = 0;
+    }
+    else if (hue >= 120 && hue < 180)
+    {
+        red = 0;
+        green = C;
+        blue = X;
+    }
+    else if (hue >= 180 && hue < 240)
+    {
+        red = 0;
+        green = X;
+        blue = C;
+    }
+    else if (hue >= 240 && hue < 300)
+    {
+        red = X;
+        green = 0;
+        blue = C;
+    }
+    else if (hue >= 300 && hue < 360)
+    {
+        red = C;
+        green = 0;
+        blue = X;
+    }
+
+    red += m;
+    green += m;
+    blue += m;
+
+    return Color::fromRGB(red, green, blue, alpha);
+}
+
+std::string Color::toString() const
+{
+    return std::to_string(R) + ", " + std::to_string(G) + ", " + std::to_string(B) + ", " + std::to_string(A);
+}
+
+int Color::get_red_int() const
 {
     return to_int(R);
 }
 
-float Color::get_red_float()
+float Color::get_red_float() const
 {
     return to_float(R);
 }
 
-int Color::get_green_int()
+int Color::get_green_int() const
 {
     return to_int(G);
 }
 
-float Color::get_green_float()
+float Color::get_green_float() const
 {
     return to_float(G);
 }
 
-int Color::get_blue_int()
+int Color::get_blue_int() const
 {
     return to_int(B);
 }
 
-float Color::get_blue_float()
+float Color::get_blue_float() const
 {
     return to_float(B);
 }
 
-int Color::get_alpha_int()
+int Color::get_alpha_int() const
 {
     return to_int(A);
 }
 
-float Color::get_alpha_float()
+float Color::get_alpha_float() const
 {
     return to_float(A);
 }

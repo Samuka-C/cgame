@@ -2,6 +2,7 @@
 #define CGAME_COLOR
 
 #include <cstdint>
+#include <string>
 
 /**
  * @brief stores the data about a color (with transparency)
@@ -13,23 +14,80 @@ private:
     uint8_t G;
     uint8_t B;
     uint8_t A;
+
+    Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
 public:
-    Color(int red, int green, int blue, int alpha);
-    Color(int red, int green, int blue);
-    Color(float red, float green, float blue, float alpha);
-    Color(float red, float green, float blue);
 
-    int get_red_int();
-    float get_red_float();
+    /**
+     * @brief Create a color from its RGB values
+     * 
+     * @param red from 0 to 255
+     * @param green from 0 to 255
+     * @param blue from 0 to 255
+     */
+    static Color fromRGB(int red, int green, int blue);
 
-    int get_green_int();
-    float get_green_float();
+    /**
+     * @brief Create a color from its RGB values. plus the alpha value
+     * 
+     * @param red from 0 to 255
+     * @param green from 0 to 255
+     * @param blue from 0 to 255
+     * @param alpha from 0 to 255
+     */
+    static Color fromRGB(int red, int green, int blue, int alpha);
 
-    int get_blue_int();
-    float get_blue_float();
+    /**
+     * @brief Create a color from its RGB values
+     * 
+     * @param red from 0.0 to 1.0
+     * @param green from 0.0 to 1.0
+     * @param blue from 0.0 to 1.0
+     */
+    static Color fromRGB(float red, float green, float blue);
 
-    int get_alpha_int();
-    float get_alpha_float();
+    /**
+     * @brief Create a color from its RGB values. plus the alpha value
+     * 
+     * @param red from 0.0 to 1.0
+     * @param green from 0.0 to 1.0
+     * @param blue from 0.0 to 1.0
+     * @param alpha from 0.0 to 1.0
+     */
+    static Color fromRGB(float red, float green, float blue, float alpha);
+
+    /**
+     * @brief Create a color from its HSV values
+     * 
+     * @param hue from 0 to 360
+     * @param saturation from 0.0 to 1.0
+     * @param value from 0.0 to 1.0
+     */
+    static Color fromHSV(float hue, float saturation, float value);
+
+    /**
+     * @brief Create a color from its HSV values. plus the alpha value
+     * 
+     * @param hue from 0 to 360
+     * @param saturation from 0.0 to 1.0
+     * @param value from 0.0 to 1.0
+     * @param alpha from 0.0 to 1.0
+     */
+    static Color fromHSV(float hue, float saturation, float value, float alpha);
+
+    std::string toString() const;
+
+    int get_red_int() const;
+    float get_red_float() const;
+
+    int get_green_int() const;
+    float get_green_float() const;
+
+    int get_blue_int() const;
+    float get_blue_float() const;
+
+    int get_alpha_int() const;
+    float get_alpha_float() const;
 };
 
 #endif
