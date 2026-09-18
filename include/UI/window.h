@@ -41,6 +41,12 @@ public:
     bool loop_condition();
 
     /**
+     * @brief resets the context of the window to allow it 
+     * to run in different threads than the one it was created.
+     */
+    void reset_context();
+
+    /**
      * @brief draws a color in the background of the window
      * 
      * @param red red channel of the color from 0 to 1
@@ -51,9 +57,9 @@ public:
     void draw_background(Color color);
 
     /**
-     * @brief polls keyboard and mouse events
+     * @brief closes the window
      */
-    void pollEvents();
+    void close();
 };
 
 #endif

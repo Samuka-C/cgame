@@ -41,6 +41,11 @@ bool Window::loop_condition()
     return !glfwWindowShouldClose(glfw_window_ptr);
 }
 
+void Window::reset_context()
+{
+    glfwMakeContextCurrent(glfw_window_ptr);
+}
+
 void Window::draw_background(Color color)
 {
     glClearColor(
@@ -53,7 +58,7 @@ void Window::draw_background(Color color)
     glfwSwapBuffers(glfw_window_ptr);
 }
 
-void Window::pollEvents()
+void Window::close()
 {
-    glfwPollEvents();
+    glfwSetWindowShouldClose(glfw_window_ptr, GLFW_TRUE);
 }
