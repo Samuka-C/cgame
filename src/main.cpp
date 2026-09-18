@@ -9,8 +9,8 @@ int main()
 
     while (new_window.loop_condition())
     {
-        new_window.draw_background(Color(0.2f, 0.3f, 0.8f));
-        new_window.pollEvents();
+        new_window.draw_background(Color::fromRGB(0.2f, 0.3f, 0.8f));
+        glfwPollEvents();
     }
 
     terminate_glfw();
