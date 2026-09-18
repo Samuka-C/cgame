@@ -5,6 +5,8 @@
 #include <GLFW/glfw3.h>
 #include <Util/Color/color.h>
 
+#include <string>
+
 /**
  * @brief starts the glfw module, allowing the creation of windows
  * 
@@ -20,14 +22,38 @@ bool start_glfw();
 bool terminate_glfw();
 
 /**
+ * @brief polls events related to the glfw windows
+ */
+void pollEvents();
+
+/**
+ * @brief resets the glfw context on the current thread.
+ */
+void resetContext();
+
+/**
  * @brief A window object that is the interface between the program and the user
  */
 class Window
 {
 private:
+    std::string title;
+    int width;
+    int height;
     GLFWwindow* glfw_window_ptr;
 public:
-    Window(const char* title, int width, int height);
+
+    /**
+     * @brief creates a window object
+     * 
+     * @attention doesn't actually start the window. for that, use start()
+     */
+    Window(std::string title, int width, int height);
+
+    /**
+     * @brief starts the windows and sets the glfw context
+     */
+    void start();
 
     /**
      * @brief use in:

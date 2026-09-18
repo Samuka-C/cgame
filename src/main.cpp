@@ -6,11 +6,8 @@
 const Color blue = Color::fromHSV(220, 0.6, 1);
 const Color red = Color::fromHSV(15, 1, 0.85);
 
-void runWindow(const char* title, int width, int height, Color color)
+void runWindow(Window& window, Color color)
 {
-    Window window(title, width, height);
-
-    // The OpenGL context belongs to this thread.
     window.reset_context();
 
     while (window.loop_condition())
@@ -23,21 +20,19 @@ int main()
 {
     start_glfw();
 
-    std::thread blue_thread(
-        runWindow,
-        "blue",
-        600,
-        800,
-        blue
-    );
+    Window blue_window("blue", 800, 600);
+    blue_window.start();
+    Window red_window("red", 800, 600);
+    red_window.start();
+    resetContext();
 
-    std::thread red_thread(
-        runWindow,
-        "red",
-        600,
-        800,
-        red
-    );
+    std::thread blue_thread(runWindow, std::ref(blue_window), blue);
+    std::thread red_thread(runWindow, std::ref(red_window), red);
+
+    while (blue_window.loop_condition() || red_window.loop_condition())
+    {
+        pollEvents();
+    }
 
     blue_thread.join();
     red_thread.join();
