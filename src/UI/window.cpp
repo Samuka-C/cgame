@@ -153,15 +153,16 @@ void Window::start()
 void Window::loop_thread_function()
 {
     auto start = std::chrono::steady_clock::now();
-    std::chrono::_V2::steady_clock::time_point end;
 
     reset_context();
 
     while (this->loop_condition())
     {
-        end = std::chrono::steady_clock::now();
+        auto end = std::chrono::steady_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
         update(duration.count());
+
         start = std::chrono::steady_clock::now();
     }
 

@@ -40,6 +40,16 @@ int main()
     while (red_window.isRunning() || green_window.isRunning() || blue_window.isRunning())
     {
         pollEvents();
+
+        // TODO: find a way to close windows automatically 
+        if (!red_window.isRunning())
+            red_window.close();
+
+        if (!green_window.isRunning())
+            green_window.close();
+
+        if (!blue_window.isRunning())
+            blue_window.close();
     }
 
     terminate_glfw();
