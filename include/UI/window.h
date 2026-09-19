@@ -6,6 +6,7 @@
 #include <Util/Color/color.h>
 
 #include <string>
+#include <atomic>
 
 /**
  * @brief starts the glfw module, allowing the creation of windows
@@ -41,8 +42,18 @@ private:
     int width;
     int height;
     GLFWwindow* glfw_window_ptr;
-public:
+    std::atomic<bool> running;
 
+    void loop();
+
+    /**
+     * @brief method that is called in a loop after the window is started until it's closed.
+     * 
+     * @param frameTimeMiliseconds time in seconds between the last call of update()
+     */
+    virtual void update(float frameTimeMiliseconds);
+
+public:
     /**
      * @brief creates a window object
      * 
@@ -55,6 +66,8 @@ public:
     int getWidth() const;
 
     int getHeight() const;
+
+    bool isRunning() const;
 
     /**
      * @brief starts the windows and sets the glfw context

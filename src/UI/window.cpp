@@ -2,6 +2,8 @@
 #include <Logger/logger.h>
 
 #include <mutex>
+#include <chrono>
+#include <thread>
 
 static bool glfw_initialized = false;
 static std::mutex glfw_window_creation_mutex;
@@ -28,6 +30,12 @@ void pollEvents()
 void resetContext()
 {
     glfwMakeContextCurrent(nullptr);
+    log_debug("contexto resetado para a thread atual (%d) sem janela", std::this_thread::get_id());
+}
+
+void Window::update(float frameTimeSeconds)
+{
+
 }
 
 Window::Window(std::string title, int width, int height)
@@ -50,6 +58,11 @@ int Window::getWidth() const
 int Window::getHeight() const
 {
     return height;
+}
+
+bool Window::isRunning() const
+{
+    return running;
 }
 
 void Window::start()
@@ -88,6 +101,32 @@ void Window::start()
         log_error("Failed to load GL methods");
         return;
     }
+
+    running = true;
+    std::thread loop_thread(&Window::loop, this);
+    loop_thread.detach();
+}
+
+void Window::loop()
+{
+    auto start = std::chrono::steady_clock::now();
+    std::chrono::_V2::steady_clock::time_point end;
+
+    reset_context();
+    log_debug("contexto resetado para a thread atual (%d) na janela %s", std::this_thread::get_id(), title.c_str());
+
+    while (this->loop_condition())
+    {
+        end = std::chrono::steady_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        float timeSeconds = (float)duration.count() / 1000;
+        update(timeSeconds);
+        start = std::chrono::steady_clock::now();
+    }
+
+    log_debug("finished looping for window %s", title.c_str());
+
+    running = false;
 }
 
 bool Window::loop_condition()
