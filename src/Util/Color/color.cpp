@@ -107,41 +107,41 @@ Color Color::fromHSV(float hue, float saturation, float value, float alpha)
     float X = C * (1 - std::abs(std::fmod(hue / 60, 2) - 1));
     float m = value - C;
 
-    if (hue >= 0 && hue < 60)
+    int range = std::trunc(hue / 60);
+    switch (range)
     {
+    case 0:
         red = C;
         green = X;
         blue = 0;
-    }
-    else if (hue >= 60 && hue < 120)
-    {
+        break;
+    case 1:
         red = X;
         green = C;
         blue = 0;
-    }
-    else if (hue >= 120 && hue < 180)
-    {
+        break;
+    case 2:
         red = 0;
         green = C;
         blue = X;
-    }
-    else if (hue >= 180 && hue < 240)
-    {
+        break;
+    case 3:
         red = 0;
         green = X;
         blue = C;
-    }
-    else if (hue >= 240 && hue < 300)
-    {
+        break;
+    case 4:
         red = X;
         green = 0;
         blue = C;
-    }
-    else if (hue >= 300 && hue < 360)
-    {
+        break;
+    case 5:
         red = C;
         green = 0;
         blue = X;
+        break;
+    default:
+        break;
     }
 
     red += m;
