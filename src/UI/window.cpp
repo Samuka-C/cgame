@@ -11,13 +11,58 @@ static std::mutex glfw_window_creation_mutex;
 
 bool start_glfw()
 {
-    if (!glfwInit())
+    if (!glfw_initialized)
     {
-        log_error("Failed to initialize GLFW");
-        return false;
+        if (!glfwInit())
+        {
+            log_error("Failed to initialize GLFW");
+            return false;
+        }
+
+        glfw_initialized = true;
     }
 
-    glfw_initialized = true;
+    if (!glad_initialized)
+    {
+        GLFWwindow* dummy_window_ptr;
+
+        {
+            // can't create more than window at the same time!
+            std::scoped_lock lock(glfw_window_creation_mutex);
+
+            dummy_window_ptr = glfwCreateWindow(1, 1, "GLAD", nullptr, nullptr);
+        }
+
+        if (!dummy_window_ptr)
+        {
+            const char* description;
+            int code = glfwGetError(&description);
+
+            log_error(
+                "Failed to start window: %d - %s",
+                code,
+                description ? description : "Unknown error"
+            );
+
+            return false;
+        }
+
+        glfwMakeContextCurrent(dummy_window_ptr);
+
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+        {
+            log_error("Failed to load GLAD methods");
+
+            glfwMakeContextCurrent(nullptr);
+            glfwDestroyWindow(dummy_window_ptr);
+            return false;
+        }
+
+        glfwMakeContextCurrent(nullptr);
+        glfwDestroyWindow(dummy_window_ptr);
+        glad_initialized = true;
+    }
+
     return true;
 }
 
@@ -25,32 +70,6 @@ void terminate_glfw()
 {
     glfwTerminate();
     glfw_initialized = false;
-}
-
-bool ensure_glfw()
-{
-    if (!glfw_initialized)
-        return start_glfw();
-    return true;
-}
-
-bool load_glad()
-{
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        log_error("Failed to load GLAD methods");
-        return false;
-    }
-
-    glad_initialized = true;
-    return true;
-}
-
-bool ensure_glad()
-{
-    if (!glad_initialized)
-        return load_glad();
-    return true;
 }
 
 void pollEvents()
