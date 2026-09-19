@@ -5,12 +5,25 @@
 #include <chrono>
 #include <thread>
 
-static bool glfw_initialized = false;
+static std::atomic<bool> glfw_initialized = false;
+static std::atomic<bool> glad_initialized = false;
 static std::mutex glfw_window_creation_mutex;
+
+bool ensure_glfw()
+{
+    if (!glfw_initialized)
+        return start_glfw();
+    return true;
+}
 
 bool start_glfw()
 {
-    glfwInit();
+    if (!glfwInit())
+    {
+        log_error("Failed to initialize GLFW");
+        return false;
+    }
+
     glfw_initialized = true;
     return true;
 }
@@ -19,6 +32,25 @@ void terminate_glfw()
 {
     glfwTerminate();
     glfw_initialized = false;
+}
+
+bool ensure_glad()
+{
+    if (!glad_initialized)
+        return load_glad();
+    return true;
+}
+
+bool load_glad()
+{
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        log_error("Failed to load GLAD methods");
+        return false;
+    }
+
+    glad_initialized = true;
+    return true;
 }
 
 void pollEvents()
