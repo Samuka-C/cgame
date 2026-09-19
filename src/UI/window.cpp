@@ -80,7 +80,6 @@ void pollEvents()
 void clearGLFWContext()
 {
     glfwMakeContextCurrent(nullptr);
-    log_debug("GLFW context cleared in thread %d", std::this_thread::get_id());
 }
 
 void Window::update(int frameTimeMiliseconds)
@@ -147,17 +146,16 @@ void Window::start()
     }
 
     running = true;
-    std::thread loop_thread(&Window::loop, this);
+    std::thread loop_thread(&Window::loop_thread_function, this);
     loop_thread.detach();
 }
 
-void Window::loop()
+void Window::loop_thread_function()
 {
     auto start = std::chrono::steady_clock::now();
     std::chrono::_V2::steady_clock::time_point end;
 
     reset_context();
-    log_debug("contexto resetado para a thread atual (%d) na janela %s", std::this_thread::get_id(), title.c_str());
 
     while (this->loop_condition())
     {
@@ -166,8 +164,6 @@ void Window::loop()
         update(duration.count());
         start = std::chrono::steady_clock::now();
     }
-
-    log_debug("finished looping for window %s", title.c_str());
 
     running = false;
 }

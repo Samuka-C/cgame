@@ -42,7 +42,7 @@ private:
     GLFWwindow* glfw_window_ptr;
     std::atomic<bool> running;
 
-    void loop();
+    void loop_thread_function();
 
     /**
      * @brief method that is called in a loop after the window is started until it's closed.
