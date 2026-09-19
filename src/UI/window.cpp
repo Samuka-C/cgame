@@ -1,7 +1,10 @@
 #include <UI/window.h>
 #include <Logger/logger.h>
 
+#include <mutex>
+
 static bool glfw_initialized = false;
+static std::mutex glfw_window_creation_mutex;
 
 bool start_glfw()
 {
@@ -17,7 +20,39 @@ bool terminate_glfw()
     return true;
 }
 
-Window::Window(const char* title, int width, int height)
+void pollEvents()
+{
+    glfwPollEvents();
+}
+
+void resetContext()
+{
+    glfwMakeContextCurrent(nullptr);
+}
+
+Window::Window(std::string title, int width, int height)
+{
+    this->title = title;
+    this->width = width;
+    this->height = height;
+}
+
+std::string Window::getTitle() const
+{
+    return title;
+}
+
+int Window::getWidth() const
+{
+    return width;
+}
+
+int Window::getHeight() const
+{
+    return height;
+}
+
+void Window::start()
 {
     if (!glfw_initialized)
     {
@@ -25,7 +60,26 @@ Window::Window(const char* title, int width, int height)
         return;
     }
 
-    glfw_window_ptr = glfwCreateWindow(width, height, title, nullptr, nullptr);
+    {
+        // can't create more than window at the same time!
+        std::scoped_lock lock(glfw_window_creation_mutex);
+
+        glfw_window_ptr = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+    }
+
+    if (!glfw_window_ptr)
+    {
+        const char* description;
+        int code = glfwGetError(&description);
+
+        log_error(
+            "Failed to start window: %d - %s",
+            code,
+            description ? description : "Unknown error"
+        );
+
+        return;
+    }
 
     glfwMakeContextCurrent(glfw_window_ptr);
 
@@ -60,5 +114,6 @@ void Window::draw_background(Color color)
 
 void Window::close()
 {
-    glfwSetWindowShouldClose(glfw_window_ptr, GLFW_TRUE);
+    glfwDestroyWindow(glfw_window_ptr);
+    glfw_window_ptr = nullptr;
 }
