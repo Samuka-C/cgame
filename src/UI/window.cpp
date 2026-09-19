@@ -9,13 +9,6 @@ static std::atomic<bool> glfw_initialized = false;
 static std::atomic<bool> glad_initialized = false;
 static std::mutex glfw_window_creation_mutex;
 
-bool ensure_glfw()
-{
-    if (!glfw_initialized)
-        return start_glfw();
-    return true;
-}
-
 bool start_glfw()
 {
     if (!glfwInit())
@@ -34,10 +27,10 @@ void terminate_glfw()
     glfw_initialized = false;
 }
 
-bool ensure_glad()
+bool ensure_glfw()
 {
-    if (!glad_initialized)
-        return load_glad();
+    if (!glfw_initialized)
+        return start_glfw();
     return true;
 }
 
@@ -50,6 +43,13 @@ bool load_glad()
     }
 
     glad_initialized = true;
+    return true;
+}
+
+bool ensure_glad()
+{
+    if (!glad_initialized)
+        return load_glad();
     return true;
 }
 
