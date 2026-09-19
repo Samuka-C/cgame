@@ -17,10 +17,8 @@ bool start_glfw();
 
 /**
  * @brief terminates the glfw module.
- * 
- * @returns true if it terminated the glfw module correctly. false otherwise.
  */
-bool terminate_glfw();
+void terminate_glfw();
 
 /**
  * @brief polls events related to the glfw windows

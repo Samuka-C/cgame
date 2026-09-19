@@ -15,11 +15,10 @@ bool start_glfw()
     return true;
 }
 
-bool terminate_glfw()
+void terminate_glfw()
 {
     glfwTerminate();
     glfw_initialized = false;
-    return true;
 }
 
 void pollEvents()
