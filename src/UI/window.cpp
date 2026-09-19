@@ -37,6 +37,21 @@ Window::Window(std::string title, int width, int height)
     this->height = height;
 }
 
+std::string Window::getTitle() const
+{
+    return title;
+}
+
+int Window::getWidth() const
+{
+    return width;
+}
+
+int Window::getHeight() const
+{
+    return height;
+}
+
 void Window::start()
 {
     if (!glfw_initialized)
@@ -99,5 +114,6 @@ void Window::draw_background(Color color)
 
 void Window::close()
 {
-    glfwSetWindowShouldClose(glfw_window_ptr, GLFW_TRUE);
+    glfwDestroyWindow(glfw_window_ptr);
+    glfw_window_ptr = nullptr;
 }

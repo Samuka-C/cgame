@@ -50,8 +50,16 @@ public:
      */
     Window(std::string title, int width, int height);
 
+    std::string getTitle() const;
+
+    int getWidth() const;
+
+    int getHeight() const;
+
     /**
      * @brief starts the windows and sets the glfw context
+     * 
+     * @attention should be called from the main thread!
      */
     void start();
 
@@ -84,6 +92,8 @@ public:
 
     /**
      * @brief closes the window
+     * 
+     * @attention should be called from the main thread!
      */
     void close();
 };
