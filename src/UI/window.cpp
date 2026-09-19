@@ -58,10 +58,10 @@ void pollEvents()
     glfwPollEvents();
 }
 
-void resetContext()
+void clearGLFWContext()
 {
     glfwMakeContextCurrent(nullptr);
-    log_debug("contexto resetado para a thread atual (%d) sem janela", std::this_thread::get_id());
+    log_debug("GLFW context cleared in thread %d", std::this_thread::get_id());
 }
 
 void Window::update(int frameTimeMiliseconds)

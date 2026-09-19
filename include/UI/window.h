@@ -26,9 +26,9 @@ void terminate_glfw();
 void pollEvents();
 
 /**
- * @brief resets the glfw context on the current thread.
+ * @brief clears the GLFW context on the current thread.
  */
-void resetContext();
+void clearGLFWContext();
 
 /**
  * @brief A window object that is the interface between the program and the user
