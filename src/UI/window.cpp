@@ -146,14 +146,6 @@ void Window::start()
         return;
     }
 
-    glfwMakeContextCurrent(glfw_window_ptr);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        log_error("Failed to load GL methods");
-        return;
-    }
-
     running = true;
     std::thread loop_thread(&Window::loop, this);
     loop_thread.detach();
