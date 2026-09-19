@@ -4,57 +4,43 @@
 #include <thread>
 #include <atomic>
 
-const Color blue = Color::fromHSV(220, 0.6, 1);
 const Color red = Color::fromHSV(15, 1, 0.85);
+const Color green = Color::fromHSV(100, 0.7, 0.67);
+const Color blue = Color::fromHSV(220, 0.6, 1);
 
-void runWindow(Window& window, Color color, std::atomic<bool>& running)
+class ColorWindow : public Window
 {
-    window.reset_context();
+private:
+    Color color;
 
-    while (window.loop_condition())
+    void update(int frameTimeMiliseconds) override
     {
-        window.draw_background(color);
+        draw_background(color);
     }
 
-    log_debug("closed window %s", window.getTitle().c_str());
+public:
+    ColorWindow(std::string title, int width, int height, Color color) : Window(title, width, height), color(color)
+    {
 
-    running = false;
-}
+    }
+};
 
 int main()
 {
     start_glfw();
 
-    std::atomic<bool> blue_running = true;
-    Window blue_window("blue", 800, 600);
+    ColorWindow red_window("red", 800, 600, red);
+    ColorWindow green_window("green", 800, 600, green);
+    ColorWindow blue_window("blue", 800, 600, blue);
+
+    red_window.start();
+    green_window.start();
     blue_window.start();
 
-    std::atomic<bool> red_running = true;
-    Window red_window("red", 800, 600);
-    red_window.start();
-
-    resetContext();
-
-    std::thread blue_thread(runWindow, std::ref(blue_window), blue, std::ref(blue_running));
-    std::thread red_thread(runWindow, std::ref(red_window), red, std::ref(red_running));
-
-    while (blue_running || red_running)
+    while (red_window.isRunning() || green_window.isRunning() || blue_window.isRunning())
     {
         pollEvents();
-
-        if (!blue_running)
-        {
-            blue_window.close();
-        }
-
-        if (!red_running)
-        {
-            red_window.close();
-        }
     }
-
-    blue_thread.join();
-    red_thread.join();
 
     terminate_glfw();
 
