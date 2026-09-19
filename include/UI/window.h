@@ -49,9 +49,9 @@ private:
     /**
      * @brief method that is called in a loop after the window is started until it's closed.
      * 
-     * @param frameTimeMiliseconds time in seconds between the last call of update()
+     * @param frameTimeMiliseconds time in miliseconds between the last call of update()
      */
-    virtual void update(float frameTimeMiliseconds);
+    virtual void update(int frameTimeMiliseconds);
 
 public:
     /**

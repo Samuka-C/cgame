@@ -33,7 +33,7 @@ void resetContext()
     log_debug("contexto resetado para a thread atual (%d) sem janela", std::this_thread::get_id());
 }
 
-void Window::update(float frameTimeSeconds)
+void Window::update(int frameTimeMiliseconds)
 {
 
 }
@@ -119,8 +119,7 @@ void Window::loop()
     {
         end = std::chrono::steady_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-        float timeSeconds = (float)duration.count() / 1000;
-        update(timeSeconds);
+        update(duration.count());
         start = std::chrono::steady_clock::now();
     }
 
