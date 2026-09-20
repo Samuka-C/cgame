@@ -4,10 +4,13 @@
 #include <mutex>
 #include <chrono>
 #include <thread>
+#include <list>
 
 static std::atomic<bool> glfw_initialized = false;
 static std::atomic<bool> glad_initialized = false;
 static std::mutex glfw_window_creation_mutex;
+
+static std::list<Window*> allWindows = {};
 
 bool start_glfw()
 {
@@ -94,6 +97,13 @@ Window::Window(std::string title, int width, int height)
     this->height = height;
     this->glfw_window_ptr = nullptr;
     this->running = false;
+
+    allWindows.push_front(this);
+}
+
+Window::~Window()
+{
+    allWindows.remove(this);
 }
 
 std::string Window::getTitle() const
@@ -208,4 +218,15 @@ void Window::close()
 {
     glfwDestroyWindow(glfw_window_ptr);
     glfw_window_ptr = nullptr;
+}
+
+bool Window::isAnyWindowRunning()
+{
+    for (const auto& window : allWindows)
+    {
+        if (window->isRunning())
+            return true;
+    }
+
+    return false;
 }

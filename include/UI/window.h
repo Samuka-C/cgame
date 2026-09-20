@@ -61,6 +61,8 @@ public:
      */
     Window(std::string title, int width, int height);
 
+    ~Window();
+
     std::string getTitle() const;
 
     int getWidth() const;
@@ -109,6 +111,11 @@ public:
      * @attention should be called from the main thread!
      */
     void close();
+
+    /**
+     * @brief tells if any window (created by this module) is currently running.
+     */
+    static bool isAnyWindowRunning();
 };
 
 #endif
