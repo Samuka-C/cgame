@@ -49,18 +49,18 @@ void Window::manage_window()
 
 void Window::render_window()
 {
-    auto start = std::chrono::steady_clock::now();
+    auto lastTime = std::chrono::steady_clock::now();
 
     reset_context();
 
     while (!this->should_close())
     {
-        auto end = std::chrono::steady_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        auto currentTime = std::chrono::steady_clock::now();
+        
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
+        update(duration);
 
-        update(duration.count());
-
-        start = std::chrono::steady_clock::now();
+        lastTime = currentTime;
     }
 
     running = false;
