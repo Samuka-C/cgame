@@ -27,7 +27,7 @@ public:
 
 int main()
 {
-    start_glfw();
+    Window::start_glfw();
 
     ColorWindow red_window("red", 800, 600, red);
     ColorWindow green_window("green", 800, 600, green);
@@ -39,7 +39,7 @@ int main()
 
     while (Window::isAnyWindowRunning());
 
-    terminate_glfw();
+    Window::terminate_glfw();
 
     return 0;
 }
