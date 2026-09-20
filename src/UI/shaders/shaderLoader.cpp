@@ -15,7 +15,7 @@ GLuint loadShader(std::string shaderPath, GLenum shaderType)
     return shader;
 }
 
-GLuint assembleShaderProgram(std::list<GLuint> shaders, bool deleteShaders=true)
+GLuint assembleShaderProgram(std::list<GLuint> shaders, bool deleteShaders)
 {
     GLuint shaderProgram = glCreateProgram();
 
