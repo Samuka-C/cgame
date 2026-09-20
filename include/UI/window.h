@@ -9,42 +9,34 @@
 #include <atomic>
 
 /**
- * @brief starts the glfw module, allowing the creation of windows
- * 
- * @returns true if it started the glfw module correctly. false otherwise.
- */
-bool start_glfw();
-
-/**
- * @brief terminates the glfw module.
- */
-void terminate_glfw();
-
-/**
- * @brief polls events related to the glfw windows
- */
-void pollEvents();
-
-/**
- * @brief clears the GLFW context on the current thread.
- */
-void clearGLFWContext();
-
-/**
  * @brief A window object that is the interface between the program and the user
  */
 class Window
 {
 private:
+    #pragma region attributes
+
     std::string title;
     int width;
     int height;
     GLFWwindow* glfw_window_ptr;
     std::atomic<bool> running;
 
-    void manage_window_thread_function();
+    #pragma endregion
 
-    void loop_thread_function();
+    #pragma region private methods
+
+    /**
+     * @brief function called in a special thread responsible for starting the window,
+     * starting the rendering thread, calling pollEvents() while it's running 
+     * and finally calling close() when the window is closed.
+     */
+    void manage_window();
+
+    /**
+     * @brief function called in a special thread responsible for calling update() in the window.
+     */
+    void render_window();
 
     /**
      * @brief method that is called in a loop after the window is started until it's closed.
@@ -53,7 +45,24 @@ private:
      */
     virtual void update(int frameTimeMiliseconds);
 
+    /**
+     * @brief tells if the window was closed.
+     * 
+     * @returns true if it was closed. false otherwise
+     */
+    bool should_close();
+
+    /**
+     * @brief resets the context of the window to allow it 
+     * to run in different threads than the one it was created.
+     */
+    void reset_context();
+
+    #pragma endregion
+
 public:
+    #pragma region constructors and destructors
+
     /**
      * @brief creates a window object
      * 
@@ -63,6 +72,10 @@ public:
 
     ~Window();
 
+    #pragma endregion
+
+    #pragma region get methods
+
     std::string getTitle() const;
 
     int getWidth() const;
@@ -71,29 +84,16 @@ public:
 
     bool isRunning() const;
 
+    #pragma endregion
+
+    #pragma region public methods
+
     /**
      * @brief starts the windows and sets the glfw context
      * 
      * @attention should be called from the main thread!
      */
     void start();
-
-    /**
-     * @brief use in:
-     * ```
-     * while (windowA.loop_condition())
-     * {
-     *     loop methods...
-     * }
-     * ```
-     */
-    bool loop_condition();
-
-    /**
-     * @brief resets the context of the window to allow it 
-     * to run in different threads than the one it was created.
-     */
-    void reset_context();
 
     /**
      * @brief draws a color in the background of the window
@@ -112,10 +112,38 @@ public:
      */
     void close();
 
+    #pragma endregion
+
+    #pragma region static methods
+
     /**
-     * @brief tells if any window (created by this module) is currently running.
+     * @brief starts the glfw module, allowing the creation of windows
+     * 
+     * @returns true if it started the glfw module correctly. false otherwise.
+     */
+    static bool start_glfw();
+
+    /**
+     * @brief terminates the glfw module.
+     */
+    static void terminate_glfw();
+
+    /**
+     * @brief polls events related to the glfw windows
+     */
+    static void pollEvents();
+
+    /**
+     * @brief clears the GLFW context on the current thread.
+     */
+    static void clearGLFWContext();
+
+    /**
+     * @brief tells if any window (created by this class) is currently running.
      */
     static bool isAnyWindowRunning();
+
+    #pragma endregion
 };
 
 #endif
