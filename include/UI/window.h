@@ -42,6 +42,8 @@ private:
     GLFWwindow* glfw_window_ptr;
     std::atomic<bool> running;
 
+    void manage_window_thread_function();
+
     void loop_thread_function();
 
     /**

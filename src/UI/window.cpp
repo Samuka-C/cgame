@@ -124,6 +124,13 @@ void Window::start()
         return;
     }
 
+    running = true;
+    std::thread manage_thread(&Window::manage_window_thread_function, this);
+    manage_thread.detach();
+}
+
+void Window::manage_window_thread_function()
+{
     {
         // can't create more than window at the same time!
         std::scoped_lock lock(glfw_window_creation_mutex);
@@ -145,9 +152,15 @@ void Window::start()
         return;
     }
 
-    running = true;
     std::thread loop_thread(&Window::loop_thread_function, this);
     loop_thread.detach();
+
+    while (running)
+    {
+        pollEvents();
+    }
+
+    close();
 }
 
 void Window::loop_thread_function()
