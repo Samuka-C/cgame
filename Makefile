@@ -11,7 +11,8 @@ OBJECT_LIST := $(BIN_DIR)/window.o \
 			   $(BIN_DIR)/logger.o \
 			   $(BIN_DIR)/glad.o \
 			   $(BIN_DIR)/color.o \
-			   $(BIN_DIR)/fileReader.o
+			   $(BIN_DIR)/fileReader.o \
+			   $(BIN_DIR)/shaderLoader.o
 
 $(BIN_DIR)/main$(EXE): $(BIN_DIR)/main.o $(OBJECT_LIST) | $(BIN_DIR)
 	$(CXX) $(INCLUDE) $^ -o $@ $(LIBS)
@@ -23,6 +24,9 @@ $(BIN_DIR)/logger.o: src/Logger/logger.cpp | $(BIN_DIR)
 	$(CXX) $(INCLUDE) -c $< -o $@
 
 $(BIN_DIR)/window.o: src/UI/window.cpp | $(BIN_DIR)
+	$(CXX) $(INCLUDE) -c $< -o $@
+
+$(BIN_DIR)/shaderLoader.o: src/UI/shaders/shaderLoader.cpp | $(BIN_DIR)
 	$(CXX) $(INCLUDE) -c $< -o $@
 
 $(BIN_DIR)/color.o: src/Util/Color/color.cpp | $(BIN_DIR)
