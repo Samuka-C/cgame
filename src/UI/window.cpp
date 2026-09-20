@@ -222,7 +222,7 @@ void Window::close()
 
 bool Window::isAnyWindowRunning()
 {
-    for (const auto& window : allWindows)
+    for (auto window : allWindows)
     {
         if (window->isRunning())
             return true;
