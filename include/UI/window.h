@@ -96,7 +96,7 @@ public:
      */
     void start();
 
-    void draw_triangle();
+    void draw_triangle(float radius, float angle);
 
     /**
      * @brief draws a color in the background of the window

@@ -12,10 +12,15 @@ class ColorWindow : public Window
 {
 private:
     Color color;
+    float angle = 0;
+    float angleV = 0.1f;
 
     void update(int frameTimeMiliseconds) override
     {
+        angle += angleV * frameTimeMiliseconds; 
+
         draw_background(color);
+        draw_triangle(0.5, angle);
     }
 
 public:

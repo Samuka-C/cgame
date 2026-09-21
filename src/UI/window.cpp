@@ -6,6 +6,7 @@
 #include <chrono>
 #include <thread>
 #include <list>
+#include <cmath>
 
 static std::atomic<bool> glfw_initialized = false;
 static std::atomic<bool> glad_initialized = false;
@@ -152,47 +153,64 @@ void Window::start()
     manage_thread.detach();
 }
 
-void Window::draw_triangle()
+void Window::draw_triangle(float radius, float angle)
 {
+    float pi = 2 * std::acos(0);
+
+    float angle1 = angle;
+    float angle2 = angle + 2 * pi / 3;
+    float angle3 = angle + 4 * pi / 3;
+
     float vertices[] = {
-         0.0f,  0.5f,
-        -0.5f, -0.5f,
-         0.5f, -0.5f
+        radius * std::sin(angle1),  radius * std::cos(angle1),
+        radius * std::sin(angle2),  radius * std::cos(angle2),
+        radius * std::sin(angle3),  radius * std::cos(angle3),
     };
 
-    unsigned int VAO, VBO;
+    unsigned int VertexArrayObjectId, VertexBufferObjectId;
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    // generate the Vertex Array Object
+    glGenVertexArrays(1, &VertexArrayObjectId);
 
+    // select current Vertex Array Object
+    glBindVertexArray(VertexArrayObjectId);
+
+    // generate the Vertex Buffer Object
+    glGenBuffers(1, &VertexBufferObjectId);
+
+    // select current Vertex Buffer Object
+    glBindBuffer(GL_ARRAY_BUFFER, VertexBufferObjectId);
+
+    // use the vertex and fragment shader
     glUseProgram(shaderProgram);
 
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
+    // load vertices in VBO
     glBufferData(
-        GL_ARRAY_BUFFER,
-        sizeof(vertices),
-        vertices,
+        GL_ARRAY_BUFFER, 
+        sizeof(vertices), 
+        vertices, 
         GL_STATIC_DRAW
     );
 
+    // tell GL how to read the vertices
     glVertexAttribPointer(
-        0,
-        2,
-        GL_FLOAT,
-        GL_FALSE,
-        2 * sizeof(float),
-        nullptr
+        0,                 // attribute location
+        2,                 // 2 coordinates per vertice, x and y
+        GL_FLOAT,          // vertices are float
+        GL_FALSE,          // normalization
+        2 * sizeof(float), // size of each vertice
+        nullptr            // offset
     );
 
+    // enable attribute location
     glEnableVertexAttribArray(0);
 
+    // draw thw triangles
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
-    glDeleteBuffers(1, &VBO);
-    glDeleteVertexArrays(1, &VAO);
+    // delete the VBO and VAO
+    glDeleteBuffers(1, &VertexBufferObjectId);
+    glDeleteVertexArrays(1, &VertexArrayObjectId);
 }
 
 void Window::draw_background(Color color)
