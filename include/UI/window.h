@@ -21,6 +21,7 @@ private:
     int height;
     GLFWwindow* glfw_window_ptr;
     std::atomic<bool> running;
+    GLuint shaderProgram;
 
     #pragma endregion
 
@@ -94,6 +95,8 @@ public:
      * @attention should be called from the main thread!
      */
     void start();
+
+    void draw_triangle();
 
     /**
      * @brief draws a color in the background of the window

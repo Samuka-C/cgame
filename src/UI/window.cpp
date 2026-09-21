@@ -1,5 +1,6 @@
 #include <UI/window.h>
 #include <Logger/logger.h>
+#include <UI/shaders/shaderLoader.h>
 
 #include <mutex>
 #include <chrono>
@@ -93,12 +94,18 @@ Window::Window(std::string title, int width, int height)
     this->glfw_window_ptr = nullptr;
     this->running = false;
 
+    auto vertexShader = loadShader("src/UI/shaders/vertexShader.glsl", GL_VERTEX_SHADER);
+    auto fragmentShader  = loadShader("src/UI/shaders/fragmentShader.glsl", GL_FRAGMENT_SHADER);
+
+    shaderProgram = assembleShaderProgram({vertexShader, fragmentShader});
+
     allWindows.push_front(this);
 }
 
 Window::~Window()
 {
     allWindows.remove(this);
+    glDeleteProgram(shaderProgram);
 }
 
 #pragma endregion
