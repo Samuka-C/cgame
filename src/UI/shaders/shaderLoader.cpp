@@ -1,3 +1,4 @@
+#include <Logger/logger.h>
 #include <UI/shaders/shaderLoader.h>
 #include <Util/File/fileReader.h>
 
@@ -12,6 +13,20 @@ GLuint loadShader(std::string shaderPath, GLenum shaderType)
 
     glCompileShader(shader);
 
+    GLint success;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+
+    if (!success)
+    {
+        char infoLog[512];
+        glGetShaderInfoLog(shader, 512, nullptr, infoLog);
+
+        log_error("Shader compilation failed: %s", infoLog);
+
+        glDeleteShader(shader);
+        return 0;
+    }
+
     return shader;
 }
 
@@ -25,6 +40,20 @@ GLuint assembleShaderProgram(std::list<GLuint> shaders, bool deleteShaders)
     }
 
     glLinkProgram(shaderProgram);
+
+    GLint success;
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+
+    if (!success)
+    {
+        char* description;
+        glGetProgramInfoLog(shaderProgram, 512, nullptr, description);
+
+        log_error("Shader program linking failed: %s", description);
+
+        glDeleteProgram(shaderProgram);
+        return 0;
+    }
 
     if (deleteShaders)
     {
