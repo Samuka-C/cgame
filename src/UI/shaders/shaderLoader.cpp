@@ -18,13 +18,21 @@ GLuint loadShader(std::string shaderPath, GLenum shaderType)
 
     if (!success)
     {
-        char infoLog[512];
-        glGetShaderInfoLog(shader, 512, nullptr, infoLog);
+        GLint logLength;
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
 
-        log_error("Shader compilation failed: %s", infoLog);
+        if (logLength <= 2)
+        {
+            log_error("Shader compilation failed, but OpenGL provided no error message.");
+        }
+        else
+        {
+            std::string infoLog(logLength, '\0');
 
-        glDeleteShader(shader);
-        return 0;
+            glGetShaderInfoLog(shader, logLength, nullptr, infoLog.data());
+
+            log_error("Shader compilation failed: %s", infoLog.c_str());
+        }
     }
 
     return shader;
@@ -46,14 +54,22 @@ GLuint assembleShaderProgram(std::list<GLuint> shaders, bool deleteShaders)
 
     if (!success)
     {
-        char* description;
-        glGetProgramInfoLog(shaderProgram, 512, nullptr, description);
+        GLint logLength;
+        glGetProgramiv(shaderProgram, GL_INFO_LOG_LENGTH, &logLength);
 
-        log_error("Shader program linking failed: %s", description);
+        if (logLength <= 2)
+        {
+            log_error("Shader program linking failed, but OpenGL provided no error message.");
+        }
+        else
+        {
+            std::string infoLog(logLength, '\0');
 
-        glDeleteProgram(shaderProgram);
-        return 0;
-    }
+            glGetProgramInfoLog(shaderProgram, logLength, nullptr, infoLog.data());
+
+            log_error("Shader program linking failed: %s", infoLog.c_str());
+        }
+    }  
 
     if (deleteShaders)
     {
