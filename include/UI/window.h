@@ -87,6 +87,12 @@ public:
 
     #pragma endregion
 
+    #pragma region set methods
+
+    void setTitle(const std::string& newTitle);
+
+    #pragma endregion
+
     #pragma region public methods
 
     /**

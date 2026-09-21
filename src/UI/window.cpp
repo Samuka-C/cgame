@@ -138,6 +138,16 @@ bool Window::isRunning() const
 
 #pragma endregion
 
+#pragma region set methods
+
+void Window::setTitle(const std::string& newTitle)
+{
+    title = newTitle;
+    glfwSetWindowTitle(glfw_window_ptr, title.c_str());
+}
+
+#pragma endregion
+
 #pragma region public methods
 
 void Window::start()
