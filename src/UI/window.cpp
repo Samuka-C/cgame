@@ -61,6 +61,9 @@ void Window::render_window()
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
         update(duration);
 
+        // swap buffers to draw the frame
+        glfwSwapBuffers(glfw_window_ptr);
+
         lastTime = currentTime;
     }
 
@@ -157,8 +160,6 @@ void Window::draw_background(Color color)
         color.get_blue_float(), 
         color.get_alpha_float());
     glClear(GL_COLOR_BUFFER_BIT);
-
-    glfwSwapBuffers(glfw_window_ptr);
 }
 
 void Window::close()
