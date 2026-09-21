@@ -1,5 +1,5 @@
-#ifndef WINDOW_CGAME
-#define WINDOW_CGAME
+#ifndef CGAME_WINDOW
+#define CGAME_WINDOW
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
