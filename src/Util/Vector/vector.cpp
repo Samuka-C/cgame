@@ -8,6 +8,8 @@ Vec2d::Vec2d(double x, double y)
     this->y = y;
 }
 
+#pragma region get methods
+
 double Vec2d::absolute() const
 {
     return std::sqrt(x * x + y * y);
@@ -18,6 +20,10 @@ Vec2d Vec2d::direction() const
     auto abs = absolute();
     return Vec2d(x / abs, y / abs);
 }
+
+#pragma endregion
+
+#pragma region operators
 
 Vec2d operator+(const Vec2d& first, const Vec2d& second)
 {
@@ -43,3 +49,5 @@ bool operator==(const Vec2d& first, const Vec2d& second)
 {
     return first.x == second.x and first.y == second.y;
 }
+
+#pragma endregion
