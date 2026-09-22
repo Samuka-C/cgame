@@ -34,6 +34,20 @@ Vec2d Vec2d::rotate(Angle angle) const
 
 #pragma region operators
 
+Vec2d& Vec2d::operator+=(const Vec2d& other)
+{
+    x += other.x;
+    y += other.y;
+    return *this;
+}
+
+Vec2d& Vec2d::operator-=(const Vec2d& other)
+{
+    x -= other.x;
+    y -= other.y;
+    return *this;
+}
+
 Vec2d operator+(const Vec2d& first, const Vec2d& second)
 {
     return Vec2d(first.x + second.x, first.y + second.y);

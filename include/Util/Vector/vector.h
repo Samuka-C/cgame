@@ -29,6 +29,14 @@ public:
     Vec2d rotate(Angle angle) const;
 
     #pragma endregion
+
+    #pragma region class operators
+
+    Vec2d& operator+=(const Vec2d& other);
+
+    Vec2d& operator-=(const Vec2d& other);
+
+    #pragma endregion
 };
 
 #pragma region operators
