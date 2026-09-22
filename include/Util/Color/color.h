@@ -17,6 +17,24 @@ private:
 
     Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
 public:
+    #pragma region get methods
+    std::string toString() const;
+
+    int get_red_int() const;
+    float get_red_float() const;
+
+    int get_green_int() const;
+    float get_green_float() const;
+
+    int get_blue_int() const;
+    float get_blue_float() const;
+
+    int get_alpha_int() const;
+    float get_alpha_float() const;
+
+    #pragma endregion
+
+    #pragma region static color pickers
 
     /**
      * @brief Create a color from its RGB values
@@ -75,19 +93,17 @@ public:
      */
     static Color fromHSV(float hue, float saturation, float value, float alpha);
 
-    std::string toString() const;
+    #pragma endregion
 
-    int get_red_int() const;
-    float get_red_float() const;
+    #pragma region colors
 
-    int get_green_int() const;
-    float get_green_float() const;
+    static const Color white;
+    static const Color black;
+    static const Color red;
+    static const Color green;
+    static const Color blue;
 
-    int get_blue_int() const;
-    float get_blue_float() const;
-
-    int get_alpha_int() const;
-    float get_alpha_float() const;
+    #pragma endregion
 };
 
 #endif

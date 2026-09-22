@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <cmath>
 
+#pragma region helper methods
+
 uint8_t from_float(float value)
 {
     if (value < 0.0f)
@@ -63,6 +65,10 @@ float fix_angle(float angle)
     return angle;
 }
 
+#pragma endregion
+
+#pragma region constructor
+
 Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
     R = from_int(red);
@@ -70,6 +76,59 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
     B = from_int(blue);
     A = from_int(alpha);
 }
+
+#pragma endregion
+
+#pragma region get methods
+
+std::string Color::toString() const
+{
+    return std::to_string(R) + ", " + std::to_string(G) + ", " + std::to_string(B) + ", " + std::to_string(A);
+}
+
+int Color::get_red_int() const
+{
+    return to_int(R);
+}
+
+float Color::get_red_float() const
+{
+    return to_float(R);
+}
+
+int Color::get_green_int() const
+{
+    return to_int(G);
+}
+
+float Color::get_green_float() const
+{
+    return to_float(G);
+}
+
+int Color::get_blue_int() const
+{
+    return to_int(B);
+}
+
+float Color::get_blue_float() const
+{
+    return to_float(B);
+}
+
+int Color::get_alpha_int() const
+{
+    return to_int(A);
+}
+
+float Color::get_alpha_float() const
+{
+    return to_float(A);
+}
+
+#pragma endregion
+
+#pragma region static color pickers
 
 Color Color::fromRGB(int red, int green, int blue)
 {
@@ -151,47 +210,14 @@ Color Color::fromHSV(float hue, float saturation, float value, float alpha)
     return Color::fromRGB(red, green, blue, alpha);
 }
 
-std::string Color::toString() const
-{
-    return std::to_string(R) + ", " + std::to_string(G) + ", " + std::to_string(B) + ", " + std::to_string(A);
-}
+#pragma endregion
 
-int Color::get_red_int() const
-{
-    return to_int(R);
-}
+#pragma region colors
 
-float Color::get_red_float() const
-{
-    return to_float(R);
-}
+const Color Color::white = Color::fromRGB(255, 255, 255);
+const Color Color::black = Color::fromRGB(  0,   0,   0);
+const Color Color::red   = Color::fromRGB(255,   0,   0);
+const Color Color::green = Color::fromRGB(  0, 255,   0);
+const Color Color::blue  = Color::fromRGB(  0,   0, 255);
 
-int Color::get_green_int() const
-{
-    return to_int(G);
-}
-
-float Color::get_green_float() const
-{
-    return to_float(G);
-}
-
-int Color::get_blue_int() const
-{
-    return to_int(B);
-}
-
-float Color::get_blue_float() const
-{
-    return to_float(B);
-}
-
-int Color::get_alpha_int() const
-{
-    return to_int(A);
-}
-
-float Color::get_alpha_float() const
-{
-    return to_float(A);
-}
+#pragma endregion
