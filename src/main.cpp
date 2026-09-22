@@ -26,7 +26,7 @@ private:
         angle += angleV * frameTimeMiliseconds; 
 
         draw_background(color);
-        draw_triangle(0.2 + (1 + std::cos(angle)) / 4, angle);
+        draw_triangle(0.2 + (1 + std::cos(angle)) / 4, angle, Color::green);
     }
 
 public:
@@ -41,12 +41,8 @@ int main()
     Window::start_glfw();
 
     ColorWindow red_window("red", 800, 800, red);
-    ColorWindow green_window("green", 800, 600, green);
-    ColorWindow blue_window("blue", 800, 600, blue);
 
     red_window.start();
-    // green_window.start();
-    // blue_window.start();
 
     while (Window::isAnyWindowRunning());
 
