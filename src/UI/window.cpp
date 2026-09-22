@@ -163,7 +163,7 @@ void Window::start()
     manage_thread.detach();
 }
 
-void Window::draw_triangle(float radius, float angle)
+void Window::draw_triangle(float radius, float angle, Color color)
 {
     float pi = 2 * std::acos(0);
 
@@ -193,6 +193,16 @@ void Window::draw_triangle(float radius, float angle)
 
     // use the vertex and fragment shader
     glUseProgram(shaderProgram);
+
+    // set the color in the fragment shader
+    auto colorLocation = glGetUniformLocation(shaderProgram, "fragmentColor");
+    glUniform4f(
+        colorLocation, 
+        color.get_red_float(),
+        color.get_green_float(),
+        color.get_blue_float(),
+        color.get_alpha_float()
+    );
 
     // load vertices in VBO
     glBufferData(
