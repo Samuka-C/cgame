@@ -55,6 +55,11 @@ void Window::render_window()
 
     reset_context();
 
+    auto vertexShader = loadShader("src/UI/shaders/vertexShader.glsl", GL_VERTEX_SHADER);
+    auto fragmentShader  = loadShader("src/UI/shaders/fragmentShader.glsl", GL_FRAGMENT_SHADER);
+
+    shaderProgram = assembleShaderProgram({vertexShader, fragmentShader});
+
     while (!this->should_close())
     {
         auto currentTime = std::chrono::steady_clock::now();
@@ -97,11 +102,6 @@ Window::Window(std::string title, int width, int height)
     this->height = height;
     this->glfw_window_ptr = nullptr;
     this->running = false;
-
-    auto vertexShader = loadShader("src/UI/shaders/vertexShader.glsl", GL_VERTEX_SHADER);
-    auto fragmentShader  = loadShader("src/UI/shaders/fragmentShader.glsl", GL_FRAGMENT_SHADER);
-
-    shaderProgram = assembleShaderProgram({vertexShader, fragmentShader});
 
     allWindows.push_front(this);
 }
@@ -196,6 +196,7 @@ void Window::draw_triangle(float radius, float angle, Color color)
 
     // set the color in the fragment shader
     auto colorLocation = glGetUniformLocation(shaderProgram, "fragmentColor");
+
     glUniform4f(
         colorLocation, 
         color.get_red_float(),
