@@ -24,7 +24,7 @@ Vec2d operator+(const Vec2d& first, const Vec2d& second)
     return Vec2d(first.x + second.x, first.y + second.y);
 }
 
-Vec2d operator+(const Vec2d& first, const Vec2d& second)
+Vec2d operator-(const Vec2d& first, const Vec2d& second)
 {
     return Vec2d(first.x - second.x, first.y - second.y);
 }

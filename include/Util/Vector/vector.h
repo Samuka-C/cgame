@@ -22,7 +22,7 @@ public:
 
 Vec2d operator+(const Vec2d& first, const Vec2d& second);
 
-Vec2d operator+(const Vec2d& first, const Vec2d& second);
+Vec2d operator-(const Vec2d& first, const Vec2d& second);
 
 Vec2d operator*(const Vec2d& vector, double value);
 
