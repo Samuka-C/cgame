@@ -1,6 +1,8 @@
 #ifndef CGAME_VECTOR
 #define CGAME_VECTOR
 
+#include <Util/Angle/angle.h>
+
 class Vec2d
 {
 public:
@@ -20,6 +22,11 @@ public:
      * @brief returns a new vector with size 1 with the same direction as this vector
      */
     Vec2d direction() const;
+
+    /**
+     * @brief returns a new vector rotated a certain angle from the original, in relation to the origin (0, 0)
+     */
+    Vec2d rotate(Angle angle) const;
 
     #pragma endregion
 };

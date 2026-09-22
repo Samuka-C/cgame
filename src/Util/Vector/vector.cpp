@@ -21,6 +21,15 @@ Vec2d Vec2d::direction() const
     return Vec2d(x / abs, y / abs);
 }
 
+Vec2d Vec2d::rotate(Angle angle) const
+{
+    // you can't escape linear transformations
+    return Vec2d(
+        x * angle.cos() + y * angle.sin(),
+        x * -angle.sin() + y * angle.cos()
+    );
+}
+
 #pragma endregion
 
 #pragma region operators
