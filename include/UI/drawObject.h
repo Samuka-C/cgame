@@ -19,6 +19,11 @@ public:
      * @brief rotates all vertices around the center a given angle.
      */
     void rotate(Angle angle);
+
+    /**
+     * @brief moves all vertices and the center.
+     */
+    void move(Vec2d delta);
 };
 
 #endif

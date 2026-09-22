@@ -8,3 +8,13 @@ void DrawObject::rotate(Angle angle)
         vertex = centerVertexVector.rotate(angle) + center;
     }
 }
+
+void DrawObject::move(Vec2d delta)
+{
+    center += delta;
+
+    for (auto& vertex : vertices)
+    {
+        vertex += delta;
+    }
+}
