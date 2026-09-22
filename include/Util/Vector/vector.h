@@ -28,4 +28,6 @@ Vec2d operator*(const Vec2d& vector, double value);
 
 Vec2d operator*(double value, const Vec2d& vector);
 
+bool operator==(const Vec2d& first, const Vec2d& second);
+
 #endif

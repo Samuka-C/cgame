@@ -38,3 +38,8 @@ Vec2d operator*(double value, const Vec2d& vector)
 {
     return Vec2d(vector.x * value, vector.y * value);
 }
+
+bool operator==(const Vec2d& first, const Vec2d& second)
+{
+    return first.x == second.x and first.y == second.y;
+}
