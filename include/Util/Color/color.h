@@ -100,8 +100,15 @@ public:
     static const Color white;
     static const Color black;
     static const Color red;
+    static const Color orange;
+    static const Color yellow;
+    static const Color lime;
     static const Color green;
+    static const Color cyan;
     static const Color blue;
+    static const Color violet;
+    static const Color purple;
+    static const Color pink;
 
     #pragma endregion
 };

@@ -214,10 +214,17 @@ Color Color::fromHSV(float hue, float saturation, float value, float alpha)
 
 #pragma region colors
 
-const Color Color::white = Color::fromRGB(255, 255, 255);
-const Color Color::black = Color::fromRGB(  0,   0,   0);
-const Color Color::red   = Color::fromRGB(255,   0,   0);
-const Color Color::green = Color::fromRGB(  0, 255,   0);
-const Color Color::blue  = Color::fromRGB(  0,   0, 255);
+const Color Color::white   = Color::fromRGB(255, 255, 255);
+const Color Color::black   = Color::fromRGB(  0,   0,   0);
+const Color Color::red     = Color::fromRGB(255,   0,   0);
+const Color Color::orange  = Color::fromRGB(255, 127,   0);
+const Color Color::yellow  = Color::fromRGB(255, 255,   0);
+const Color Color::lime    = Color::fromRGB(127, 255,   0);
+const Color Color::green   = Color::fromRGB(  0, 255,   0);
+const Color Color::cyan    = Color::fromRGB(  0, 255, 255);
+const Color Color::blue    = Color::fromRGB(  0, 127, 255);
+const Color Color::violet  = Color::fromRGB(  0,   0, 255);
+const Color Color::purple  = Color::fromRGB(127,   0, 255);
+const Color Color::pink    = Color::fromRGB(255,   0, 127);
 
 #pragma endregion
