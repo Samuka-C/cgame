@@ -8,6 +8,11 @@ std::list<Vec2d> DrawObject::get_vertices() const
     return vertices;
 }
 
+Vec2d DrawObject::get_position() const
+{
+    return center;
+}
+
 void DrawObject::rotate(Angle angle)
 {
     for (auto& vertex : vertices)

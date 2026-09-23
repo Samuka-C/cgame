@@ -27,6 +27,11 @@ public:
     std::list<Vec2d> get_vertices() const;
 
     /**
+     * @brief returns the center of the object
+     */
+    Vec2d get_position() const;
+
+    /**
      * @brief rotates all vertices around the center a given angle.
      */
     void rotate(Angle angle);
