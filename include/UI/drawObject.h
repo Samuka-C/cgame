@@ -3,6 +3,7 @@
 
 #include <Util/Vector/vector.h>
 #include <Util/Angle/angle.h>
+#include <Util/Color/color.h>
 #include <list>
 
 /**
@@ -13,7 +14,17 @@ class DrawObject
 private:
     std::list<Vec2d> vertices;
     Vec2d center;
+
+protected:
+    DrawObject(std::list<Vec2d> vertices, Vec2d center) : vertices(vertices), center(center)
+    {}
+
 public:
+
+    /**
+     * @brief returns the list of vertices of the object
+     */
+    std::list<Vec2d> get_vertices();
 
     /**
      * @brief rotates all vertices around the center a given angle.
@@ -21,9 +32,47 @@ public:
     void rotate(Angle angle);
 
     /**
-     * @brief moves all vertices and the center.
+     * @brief moves the object a specified distance in each axis
      */
     void move(Vec2d delta);
+
+    /**
+     * @brief moves the object to a new position
+     */
+    void set_position(Vec2d newPosition);
+};
+
+/**
+ * @brief a abstract class for objects that have one solid color
+ */
+class SolidColorObject : public DrawObject
+{
+private:
+    Color color;
+
+protected:
+    SolidColorObject(std::list<Vec2d> vertices, Vec2d center, Color color) : DrawObject(vertices, center), color(color)
+    {}
+
+public:
+
+    /**
+     * @brief returns the color of the object
+     */
+    Color get_color();
+};
+
+/**
+ * @brief a equilateral triangle
+ */
+class EquilateralTriangle : public SolidColorObject
+{
+public:
+
+    /**
+     * @brief creates a equilateral triangle with center 0, 0
+     */
+    EquilateralTriangle(double sideLength, Color color);
 };
 
 #endif
