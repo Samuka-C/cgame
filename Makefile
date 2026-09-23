@@ -29,7 +29,7 @@ $(BIN_DIR)/logger.o: src/Logger/logger.cpp | $(BIN_DIR)
 $(BIN_DIR)/window.o: src/UI/window.cpp | $(BIN_DIR)
 	$(CXX) $(INCLUDE) -c $< -o $@
 
-$(BIN_DIR)/window.o: src/UI/drawObject.cpp | $(BIN_DIR)
+$(BIN_DIR)/drawObject.o: src/UI/drawObject.cpp | $(BIN_DIR)
 	$(CXX) $(INCLUDE) -c $< -o $@
 
 $(BIN_DIR)/shaderLoader.o: src/UI/shaders/shaderLoader.cpp | $(BIN_DIR)
