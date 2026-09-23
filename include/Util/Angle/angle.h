@@ -1,7 +1,7 @@
 #ifndef CGAME_ANGLE
 #define CGAME_ANGLE
 
-const double PI;
+extern const double PI;
 
 class Angle
 {
