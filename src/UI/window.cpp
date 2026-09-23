@@ -165,19 +165,17 @@ void Window::start()
     manage_thread.detach();
 }
 
-void Window::draw_triangle(float radius, float angle, Color color)
+void Window::draw_soild_color_object(SolidColorObject object)
 {
-    float pi = 2 * std::acos(0);
+    int number_vertices = object.get_vertices().size();
 
-    float angle1 = angle;
-    float angle2 = angle + 2 * pi / 3;
-    float angle3 = angle + 4 * pi / 3;
-
-    float vertices[] = {
-        radius * std::sin(angle1),  radius * std::cos(angle1),
-        radius * std::sin(angle2),  radius * std::cos(angle2),
-        radius * std::sin(angle3),  radius * std::cos(angle3),
-    };
+    double vertices[2 * number_vertices]; // each vertice has 2 doubles
+    int index = 0;
+    for (auto vertex : object.get_vertices())
+    {
+        vertices[index++] = vertex.x;
+        vertices[index++] = vertex.y;
+    }
 
     unsigned int VertexArrayObjectId, VertexBufferObjectId;
 
@@ -201,10 +199,10 @@ void Window::draw_triangle(float radius, float angle, Color color)
 
     glUniform4f(
         colorLocation, 
-        color.get_red_float(),
-        color.get_green_float(),
-        color.get_blue_float(),
-        color.get_alpha_float()
+        object.get_color().get_red_float(),
+        object.get_color().get_green_float(),
+        object.get_color().get_blue_float(),
+        object.get_color().get_alpha_float()
     );
 
     // load vertices in VBO
@@ -219,9 +217,9 @@ void Window::draw_triangle(float radius, float angle, Color color)
     glVertexAttribPointer(
         0,                 // attribute location
         2,                 // 2 coordinates per vertice, x and y
-        GL_FLOAT,          // vertices are float
+        GL_DOUBLE,         // vertices are double
         GL_FALSE,          // normalization
-        2 * sizeof(float), // size of each vertice
+        2 * sizeof(double),// size of each vertice
         nullptr            // offset
     );
 
@@ -229,7 +227,7 @@ void Window::draw_triangle(float radius, float angle, Color color)
     glEnableVertexAttribArray(0);
 
     // draw thw triangles
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, number_vertices);
 
     // delete the VBO and VAO
     glDeleteBuffers(1, &VertexBufferObjectId);

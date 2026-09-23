@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <Util/Color/color.h>
+#include <UI/drawObject.h>
 
 #include <string>
 #include <atomic>
@@ -102,7 +103,7 @@ public:
      */
     void start();
 
-    void draw_triangle(float radius, float angle, Color color);
+    void draw_soild_color_object(SolidColorObject object);
 
     /**
      * @brief draws a color in the background of the window
