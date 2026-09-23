@@ -85,4 +85,19 @@ public:
     EquilateralTriangle(double sideLength, Color color);
 };
 
+class Rectangle : public SolidColorObject
+{
+public:
+
+    /**
+     * @brief creates a rectangle with center 0, 0
+     */
+    Rectangle(double width, double height, Color color);
+
+    /**
+     * @brief creates a rectangle with center 0, 0
+     */
+    Rectangle(Vec2d dimensions, Color color);
+};
+
 #endif
