@@ -22,6 +22,7 @@ private:
     int height;
     GLFWwindow* glfw_window_ptr;
     std::atomic<bool> running;
+    std::atomic<bool> resized;
     GLuint shaderProgram;
 
     #pragma endregion
@@ -60,6 +61,11 @@ private:
      */
     void reset_context();
 
+    /**
+     * @brief called when the window is resized
+     */
+    static void window_resized(GLFWwindow* glfw_window_ptr, int width, int height);
+
     #pragma endregion
 
 public:
@@ -80,9 +86,9 @@ public:
 
     std::string getTitle() const;
 
-    int getWidth();
+    int getWidth() const;
 
-    int getHeight();
+    int getHeight() const;
 
     bool isRunning() const;
 
@@ -114,6 +120,11 @@ public:
      * @param alpha red channel of the color from 0 to 1
      */
     void draw_background(Color color);
+
+    /**
+     * @brief update the values of the width and height the the current width and height of the window
+     */
+    void update_width_height();
 
     /**
      * @brief closes the window

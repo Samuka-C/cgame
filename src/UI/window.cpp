@@ -38,6 +38,9 @@ void Window::manage_window()
         return;
     }
 
+    // sets the window object as the user pointer for the window pointer
+    glfwSetWindowUserPointer(glfw_window_ptr, this);
+
     std::thread loop_thread(&Window::render_window, this);
     loop_thread.detach();
 
@@ -55,6 +58,11 @@ void Window::render_window()
 
     reset_context();
 
+    glfwSetFramebufferSizeCallback(
+        glfw_window_ptr,
+        window_resized
+    );
+
     auto vertexShader = loadShader("src/UI/shaders/vertexShader.glsl", GL_VERTEX_SHADER);
     auto fragmentShader  = loadShader("src/UI/shaders/fragmentShader.glsl", GL_FRAGMENT_SHADER);
 
@@ -62,6 +70,12 @@ void Window::render_window()
 
     while (!this->should_close())
     {
+        if (resized)
+        {
+            glViewport(0, 0, width, height);
+            resized = false;
+        }
+
         auto currentTime = std::chrono::steady_clock::now();
         
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
@@ -89,6 +103,16 @@ bool Window::should_close()
 void Window::reset_context()
 {
     glfwMakeContextCurrent(glfw_window_ptr);
+}
+
+void Window::window_resized(GLFWwindow* glfw_window_ptr, int width, int height)
+{
+    Window* window = static_cast<Window*>(glfwGetWindowUserPointer(glfw_window_ptr));
+
+    window->width = width;
+    window->height = height;
+
+    window->resized = true;
 }
 
 #pragma endregion
@@ -121,15 +145,13 @@ std::string Window::getTitle() const
     return title;
 }
 
-int Window::getWidth()
+int Window::getWidth() const
 {
-    glfwGetWindowSize(glfw_window_ptr, &width, &height);
     return width;
 }
 
-int Window::getHeight()
+int Window::getHeight() const
 {
-    glfwGetWindowSize(glfw_window_ptr, &width, &height);
     return height;
 }
 
@@ -167,6 +189,8 @@ void Window::start()
 
 void Window::draw_soild_color_object(SolidColorObject object)
 {
+    GLint viewport[4];
+
     int number_vertices = object.get_vertices().size();
 
     double vertices[2 * number_vertices]; // each vertice has 2 doubles
@@ -242,6 +266,11 @@ void Window::draw_background(Color color)
         color.get_blue_float(), 
         color.get_alpha_float());
     glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void Window::update_width_height()
+{
+    glfwGetWindowSize(glfw_window_ptr, &width, &height);
 }
 
 void Window::close()
