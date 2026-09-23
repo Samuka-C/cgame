@@ -213,6 +213,11 @@ void Window::set_size(int width, int height)
     resized = true;
 }
 
+void Window::set_coordinate_system(WindowCoordinateSystemMode newMode)
+{
+    coordinateMode = newMode;
+}
+
 #pragma endregion
 
 #pragma region public methods

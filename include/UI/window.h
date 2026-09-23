@@ -140,6 +140,12 @@ public:
      */
     void set_size(int width, int height);
 
+    /**
+     * @brief changes how the object coordinates are interpreted 
+     * and which point of the window the objects will be attached to when resizing the window
+     */
+    void set_coordinate_system(WindowCoordinateSystemMode newMode);
+
     #pragma endregion
 
     #pragma region public methods
