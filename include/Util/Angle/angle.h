@@ -84,6 +84,10 @@ Angle operator+(const Angle& first, const Angle& second);
 
 Angle operator-(const Angle& first, const Angle& second);
 
+Angle operator*(const Angle& angle, double value);
+
+Angle operator*(double value, const Angle& angle);
+
 bool operator==(const Angle& first, const Angle& second);
 
 #pragma endregion

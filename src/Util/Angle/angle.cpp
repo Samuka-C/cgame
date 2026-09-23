@@ -94,6 +94,16 @@ Angle operator-(const Angle& first, const Angle& second)
     return Angle::degrees(first.degrees() - second.degrees());
 }
 
+Angle operator*(const Angle& angle, double value)
+{
+    return Angle::degrees(angle.degrees() * value);
+}
+
+Angle operator*(double value, const Angle& angle)
+{
+    return Angle::degrees(angle.degrees() * value);
+}
+
 bool operator==(const Angle& first, const Angle& second)
 {
     return first.degrees() == second.degrees();
