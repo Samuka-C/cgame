@@ -16,23 +16,24 @@ private:
     float t = 0.0f;
     Angle angularSpeed = Angle::degrees(180);
 
-    EquilateralTriangle triangle = EquilateralTriangle(0.4, Color::blue);
+    SolidColorObject shape = EquilateralTriangle(200, Color::blue);
 
     void update(int frameTimeMiliseconds) override
     {
         auto deltaTimeSeconds = (float)frameTimeMiliseconds / 1000;
         t += deltaTimeSeconds;
-        triangle.rotate(angularSpeed * deltaTimeSeconds);
+        shape.rotate(angularSpeed * deltaTimeSeconds);
 
         draw_background(color);
-        draw_soild_color_object(triangle);
+        draw_soild_color_object(shape);
     }
 
 public:
     ColorWindow(std::string title, int width, int height, Color color) : Window(title, width, height), color(color)
     {
-
-    }
+        shape = EquilateralTriangle(200, Color::blue);
+        shape.set_position(width / 2, height / 2);
+    }   
 };
 
 int main()
