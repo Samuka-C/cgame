@@ -109,3 +109,34 @@ Rectangle::Rectangle(Vec2d dimensions, Color color) : SolidColorObject(
     color
 )
 {}
+
+std::list<Vec2d> create_regular_polygon(double radius, int numberSides)
+{
+    std::list<Vec2d> vertices = {};
+
+    auto center = Vec2d(0, 0);
+
+    auto angle = Angle::degrees(0);
+    auto deltaAngle = Angle::degrees(360) / numberSides;
+    
+    for (int i = 0; i < numberSides; i++)
+    {
+        auto vertex1 = Vec2d(radius * angle.cos(), radius * angle.sin());
+        auto vertex2 = Vec2d(radius * (angle + deltaAngle).cos(), radius * (angle + deltaAngle).sin());
+
+        vertices.push_front(vertex1);
+        vertices.push_front(center);
+        vertices.push_front(vertex2);
+
+        angle += deltaAngle;
+    }
+
+    return vertices;
+}
+
+RegularPolygon::RegularPolygon(double radius, int numberSides, Color color) : SolidColorObject (
+    create_regular_polygon(radius, numberSides),
+    Vec2d(0, 0),
+    color
+)
+{}

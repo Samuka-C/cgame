@@ -100,4 +100,14 @@ public:
     Rectangle(Vec2d dimensions, Color color);
 };
 
+class RegularPolygon : public SolidColorObject
+{
+public:
+
+    /**
+     * @brief creates a regular polygon with center 0, 0
+     */
+    RegularPolygon(double radius, int numberSides, Color color);
+};
+
 #endif
