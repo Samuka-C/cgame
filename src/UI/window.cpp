@@ -105,6 +105,33 @@ void Window::reset_context()
     glfwMakeContextCurrent(glfw_window_ptr);
 }
 
+Vec2d Window::convert_coordinates(Vec2d point)
+{
+    auto WindowCenter = Vec2d(width / 2, height / 2);
+
+    switch (coordinateMode)
+    {
+    case WindowCoordinateSystemMode::BottomLeft:
+        point -= WindowCenter;
+        break;
+    case WindowCoordinateSystemMode::BottomRight:
+        point.x = width - point.x;
+        point -= WindowCenter;
+        break;
+    case WindowCoordinateSystemMode::TopLeft:
+        point.y = height - point.y;
+        point -= WindowCenter;
+        break;
+    case WindowCoordinateSystemMode::TopRight:
+        point.x = width - point.x;
+        point.y = height - point.y;
+        point -= WindowCenter;
+        break;
+    }
+
+    return Vec2d(2 * point.x / width, 2 * point.y / height);
+}
+
 void Window::window_resized(GLFWwindow* glfw_window_ptr, int width, int height)
 {
     Window* window = static_cast<Window*>(glfwGetWindowUserPointer(glfw_window_ptr));
@@ -207,8 +234,10 @@ void Window::draw_soild_color_object(SolidColorObject object)
     int index = 0;
     for (auto vertex : object.get_vertices())
     {
-        vertices[index++] = vertex.x;
-        vertices[index++] = vertex.y;
+        auto ndcVertex = convert_coordinates(vertex);
+
+        vertices[index++] = ndcVertex.x;
+        vertices[index++] = ndcVertex.y;
     }
 
     unsigned int VertexArrayObjectId, VertexBufferObjectId;

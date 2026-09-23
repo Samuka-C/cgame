@@ -9,6 +9,34 @@
 #include <string>
 #include <atomic>
 
+enum class WindowCoordinateSystemMode
+{
+    /**
+     * @brief the 0, 0 starts at the bottom left corner with positive X to the right and positive Y to the top
+     */
+    BottomLeft,
+
+    /**
+     * @brief the 0, 0 starts at the bottom right corner with positive X to the left and positive Y to the top
+     */
+    BottomRight,
+
+    /**
+     * @brief the 0, 0 starts at the center with positive X to the right and positive Y to the top
+     */
+    Center,
+
+    /**
+     * @brief the 0, 0 starts at the top left with positive X to the right and positive Y to the bottom
+     */
+    TopLeft,
+
+    /**
+     * @brief the 0, 0 starts at the top right with positive X to the left and positive Y to the bottom
+     */
+    TopRight
+};
+
 /**
  * @brief A window object that is the interface between the program and the user
  */
@@ -24,6 +52,7 @@ private:
     std::atomic<bool> running;
     std::atomic<bool> resized;
     GLuint shaderProgram;
+    WindowCoordinateSystemMode coordinateMode = WindowCoordinateSystemMode::TopLeft;
 
     #pragma endregion
 
@@ -60,6 +89,11 @@ private:
      * to run in different threads than the one it was created.
      */
     void reset_context();
+
+    /**
+     * @brief converts a point in window coordinates (in pixels) to NDC
+     */
+    Vec2d convert_coordinates(Vec2d point);
 
     /**
      * @brief called when the window is resized
