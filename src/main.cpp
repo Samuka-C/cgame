@@ -13,20 +13,19 @@ class ColorWindow : public Window
 {
 private:
     Color color;
-    float angle = 0.0f;
-    float angleV = 0.0f;
-
     float t = 0.0f;
+    Angle angularSpeed = Angle::degrees(180);
+
+    EquilateralTriangle triangle = EquilateralTriangle(0.4, Color::blue);
 
     void update(int frameTimeMiliseconds) override
     {
-        t += (float)frameTimeMiliseconds / 1000;
-
-        angleV = std::sin(10 * t) / 10;
-        angle += angleV * frameTimeMiliseconds; 
+        auto deltaTimeSeconds = (float)frameTimeMiliseconds / 1000;
+        t += deltaTimeSeconds;
+        triangle.rotate(angularSpeed * deltaTimeSeconds);
 
         draw_background(color);
-        draw_triangle(0.2 + (1 + std::cos(angle)) / 4, angle, Color::green);
+        draw_soild_color_object(triangle);
     }
 
 public:
