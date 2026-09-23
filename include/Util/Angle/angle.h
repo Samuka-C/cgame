@@ -88,6 +88,8 @@ Angle operator*(const Angle& angle, double value);
 
 Angle operator*(double value, const Angle& angle);
 
+Angle operator/(const Angle& angle, double value);
+
 bool operator==(const Angle& first, const Angle& second);
 
 #pragma endregion
