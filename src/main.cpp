@@ -5,18 +5,13 @@
 #include <atomic>
 #include <cmath>
 
-const Color red = Color::fromHSV(15, 1, 0.85);
-const Color green = Color::fromHSV(100, 0.7, 0.67);
-const Color blue = Color::fromHSV(220, 0.6, 1);
-
 class ColorWindow : public Window
 {
 private:
     Color color;
     float t = 0.0f;
     Angle angularSpeed = Angle::degrees(180);
-
-    SolidColorObject shape = EquilateralTriangle(200, Color::blue);
+    SolidColorObject shape;
 
     void update(int frameTimeMiliseconds) override
     {
@@ -29,10 +24,13 @@ private:
     }
 
 public:
-    ColorWindow(std::string title, int width, int height, Color color) : Window(title, width, height), color(color)
+    ColorWindow(std::string title, int width, int height, Color color) : 
+        Window(title, width, height), 
+        color(color), 
+        shape(EquilateralTriangle(260, Color::black))
     {
-        shape = EquilateralTriangle(200, Color::blue);
-        shape.set_position(width / 2, height / 2);
+        set_coordinate_system(WindowCoordinateSystemMode::Center);
+        shape.set_position(30, -90);
     }   
 };
 
@@ -40,7 +38,7 @@ int main()
 {
     Window::start_glfw();
 
-    ColorWindow red_window("red", 800, 800, red);
+    ColorWindow red_window("red", 800, 800, Color::white);
 
     red_window.start();
 
