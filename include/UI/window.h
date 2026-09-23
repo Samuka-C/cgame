@@ -79,9 +79,9 @@ public:
 
     std::string getTitle() const;
 
-    int getWidth() const;
+    int getWidth();
 
-    int getHeight() const;
+    int getHeight();
 
     bool isRunning() const;
 

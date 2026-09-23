@@ -121,13 +121,15 @@ std::string Window::getTitle() const
     return title;
 }
 
-int Window::getWidth() const
+int Window::getWidth()
 {
+    glfwGetWindowSize(glfw_window_ptr, &width, &height);
     return width;
 }
 
-int Window::getHeight() const
+int Window::getHeight()
 {
+    glfwGetWindowSize(glfw_window_ptr, &width, &height);
     return height;
 }
 
