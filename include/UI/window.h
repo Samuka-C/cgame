@@ -127,6 +127,11 @@ public:
     void update_width_height();
 
     /**
+     * @brief change the size of the window
+     */
+    void set_size(int width, int height);
+
+    /**
      * @brief closes the window
      * 
      * @attention should be called from the main thread!

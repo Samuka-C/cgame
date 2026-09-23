@@ -273,6 +273,16 @@ void Window::update_width_height()
     glfwGetWindowSize(glfw_window_ptr, &width, &height);
 }
 
+void Window::set_size(int width, int height)
+{
+    this->width = width;
+    this->height = height;
+
+    glfwSetWindowSize(glfw_window_ptr, width, height);
+
+    resized = true;
+}
+
 void Window::close()
 {
     glfwDestroyWindow(glfw_window_ptr);
