@@ -199,6 +199,12 @@ void Window::set_title(const std::string& newTitle)
 
 void Window::set_size(int width, int height)
 {
+    if (width <= 0 or height <= 0)
+    {
+        log_error("new width (%d) and height (%d) are not valid!", width, height);
+        return;
+    }
+
     this->width = width;
     this->height = height;
 
