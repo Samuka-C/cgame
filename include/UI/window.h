@@ -96,7 +96,15 @@ public:
 
     #pragma region set methods
 
-    void setTitle(const std::string& newTitle);
+    /**
+     * @brief set the title of the window
+     */
+    void set_title(const std::string& newTitle);
+
+    /**
+     * @brief change the size of the window
+     */
+    void set_size(int width, int height);
 
     #pragma endregion
 
@@ -125,11 +133,6 @@ public:
      * @brief update the values of the width and height the the current width and height of the window
      */
     void update_width_height();
-
-    /**
-     * @brief change the size of the window
-     */
-    void set_size(int width, int height);
 
     /**
      * @brief closes the window

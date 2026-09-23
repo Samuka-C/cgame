@@ -164,10 +164,20 @@ bool Window::isRunning() const
 
 #pragma region set methods
 
-void Window::setTitle(const std::string& newTitle)
+void Window::set_title(const std::string& newTitle)
 {
     title = newTitle;
     glfwSetWindowTitle(glfw_window_ptr, title.c_str());
+}
+
+void Window::set_size(int width, int height)
+{
+    this->width = width;
+    this->height = height;
+
+    glfwSetWindowSize(glfw_window_ptr, width, height);
+
+    resized = true;
 }
 
 #pragma endregion
@@ -271,16 +281,6 @@ void Window::draw_background(Color color)
 void Window::update_width_height()
 {
     glfwGetWindowSize(glfw_window_ptr, &width, &height);
-}
-
-void Window::set_size(int width, int height)
-{
-    this->width = width;
-    this->height = height;
-
-    glfwSetWindowSize(glfw_window_ptr, width, height);
-
-    resized = true;
 }
 
 void Window::close()
