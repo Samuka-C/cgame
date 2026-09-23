@@ -72,6 +72,18 @@ Angle Angle::atan(double value)
 
 #pragma region operators
 
+Angle& Angle::operator+=(const Angle& other)
+{
+    this->angleDegrees += other.angleDegrees;
+    return *this;
+}
+
+Angle& Angle::operator-=(const Angle& other)
+{
+    this->angleDegrees -= other.angleDegrees;
+    return *this;
+}
+
 Angle operator+(const Angle& first, const Angle& second)
 {
     return Angle::degrees(first.degrees() + second.degrees());

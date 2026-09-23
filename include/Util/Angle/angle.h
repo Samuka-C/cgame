@@ -68,6 +68,14 @@ public:
     static Angle atan(double value);
 
     #pragma endregion
+
+    #pragma region class operators
+
+    Angle& operator+=(const Angle& other);
+
+    Angle& operator-=(const Angle& other);
+
+    #pragma endregion
 };
 
 #pragma region operators
