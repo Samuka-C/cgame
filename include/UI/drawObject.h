@@ -24,7 +24,7 @@ public:
     /**
      * @brief returns the list of vertices of the object
      */
-    std::list<Vec2d> get_vertices();
+    std::list<Vec2d> get_vertices() const;
 
     /**
      * @brief rotates all vertices around the center a given angle.
@@ -59,7 +59,7 @@ public:
     /**
      * @brief returns the color of the object
      */
-    Color get_color();
+    Color get_color() const;
 };
 
 /**

@@ -1,8 +1,9 @@
+#include <Logger/logger.h>
 #include <UI/drawObject.h>
 
 #include <cmath>
 
-std::list<Vec2d> DrawObject::get_vertices()
+std::list<Vec2d> DrawObject::get_vertices() const
 {
     return vertices;
 }
@@ -33,7 +34,7 @@ void DrawObject::set_position(Vec2d newPosition)
     move(delta);
 }
 
-Color SolidColorObject::get_color()
+Color SolidColorObject::get_color() const
 {
     return color;
 }
