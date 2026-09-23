@@ -27,11 +27,21 @@ void DrawObject::move(Vec2d delta)
     }
 }
 
+void DrawObject::move(double deltaX, double deltaY)
+{
+    move(Vec2d(deltaX, deltaY));
+}
+
 void DrawObject::set_position(Vec2d newPosition)
 {
     auto delta = newPosition - center;
 
     move(delta);
+}
+
+void DrawObject::set_position(double newPositionX, double newPositionY)
+{
+    set_position(Vec2d(newPositionX, newPositionY));
 }
 
 Color SolidColorObject::get_color() const

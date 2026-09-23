@@ -37,9 +37,19 @@ public:
     void move(Vec2d delta);
 
     /**
+     * @brief moves the object a specified distance in each axis
+     */
+    void move(double deltaX, double deltaY);
+
+    /**
      * @brief moves the object to a new position
      */
     void set_position(Vec2d newPosition);
+
+    /**
+     * @brief moves the object to a new position
+     */
+    void set_position(double newPositionX, double newPositionY);
 };
 
 /**
