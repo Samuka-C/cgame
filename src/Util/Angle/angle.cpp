@@ -42,9 +42,6 @@ double Angle::tan() const
 
 Angle Angle::degrees(double value)
 {
-    while (value < -180) value += 360.0;
-    while (value >= 180) value -= 360.0;
-
     return Angle(value);
 }
 
