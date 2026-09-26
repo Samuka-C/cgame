@@ -239,7 +239,7 @@ void Window::start()
     manage_thread.detach();
 }
 
-void Window::draw_soild_color_object(SolidColorObject object)
+void Window::draw_solid_color_object(SolidColorObject object)
 {
     int number_vertices = object.get_vertices().size();
 

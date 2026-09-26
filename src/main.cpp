@@ -54,9 +54,9 @@ private:
         rightPaddle.set_position(width - 10, paddleY);
 
         draw_background(color);
-        draw_soild_color_object(rightPaddle);
-        draw_soild_color_object(leftPaddle);
-        draw_soild_color_object(ball);
+        draw_solid_color_object(rightPaddle);
+        draw_solid_color_object(leftPaddle);
+        draw_solid_color_object(ball);
     }
 
 public:
