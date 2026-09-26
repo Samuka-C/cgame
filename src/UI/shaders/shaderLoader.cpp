@@ -2,6 +2,12 @@
 #include <UI/shaders/shaderLoader.h>
 #include <Util/File/fileReader.h>
 
+using namespace cgame::logger;
+using namespace cgame::util::file;
+
+namespace cgame::ui::shaders
+{
+
 GLuint loadShader(std::string shaderPath, GLenum shaderType)
 {
     std::string shaderSource = read_file(shaderPath);
@@ -80,4 +86,6 @@ GLuint assembleShaderProgram(std::list<GLuint> shaders, bool deleteShaders)
     }
 
     return shaderProgram;
+}
+
 }

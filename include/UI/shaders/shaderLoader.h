@@ -7,6 +7,9 @@
 #include <string>
 #include <list>
 
+namespace cgame::ui::shaders
+{
+
 /**
  * @brief loads and compiles a gl shader
  * 
@@ -22,5 +25,7 @@ GLuint loadShader(std::string shaderPath, GLenum shaderType);
  * @return a GLuint code for the shader program created
  */
 GLuint assembleShaderProgram(std::list<GLuint> shaders, bool deleteShaders=true);
+
+}
 
 #endif
