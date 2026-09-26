@@ -1,6 +1,9 @@
 #ifndef CGAME_LOGGER
 #define CGAME_LOGGER
 
+namespace cgame::logger
+{
+
 #define log_debug(fmt, ...) \
     logDebugCaller(__FILE__, __LINE__, __func__, fmt, ##__VA_ARGS__)
 
@@ -32,5 +35,7 @@ void logWarningCaller(const char* file, int line, const char* func, const char* 
  * Shows a error message on the console
  */
 void logErrorCaller(const char* file, int line, const char* func, const char* fmt, ...);
+
+}
 
 #endif
