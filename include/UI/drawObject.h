@@ -6,6 +6,11 @@
 #include <Util/Color/color.h>
 #include <list>
 
+using namespace cgame::util::angle;
+
+namespace cgame::ui
+{
+
 /**
  * @brief a abstract class for objects that can be drawn in a window
  */
@@ -114,5 +119,7 @@ public:
      */
     RegularPolygon(double radius, int numberSides, Color color);
 };
+
+}
 
 #endif

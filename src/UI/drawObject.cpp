@@ -3,6 +3,13 @@
 
 #include <cmath>
 
+using namespace cgame::logger;
+using namespace cgame::util::color;
+using namespace cgame::util::vector;
+
+namespace cgame::ui
+{
+
 std::list<Vec2d> DrawObject::get_vertices() const
 {
     return vertices;
@@ -145,3 +152,5 @@ RegularPolygon::RegularPolygon(double radius, int numberSides, Color color) : So
     color
 )
 {}
+
+}
