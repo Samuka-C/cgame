@@ -2,6 +2,9 @@
 
 #include <cmath>
 
+namespace cgame::util::angle
+{
+
 const double PI = 2 * std::acos(0);
 
 Angle::Angle(double angleDegrees)
@@ -112,3 +115,5 @@ bool operator==(const Angle& first, const Angle& second)
 }
 
 #pragma endregion
+
+}

@@ -1,6 +1,9 @@
 #ifndef CGAME_ANGLE
 #define CGAME_ANGLE
 
+namespace cgame::util::angle
+{
+
 extern const double PI;
 
 class Angle
@@ -93,5 +96,7 @@ Angle operator/(const Angle& angle, double value);
 bool operator==(const Angle& first, const Angle& second);
 
 #pragma endregion
+
+}
 
 #endif
