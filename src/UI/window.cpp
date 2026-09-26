@@ -240,8 +240,6 @@ void Window::start()
 
 void Window::draw_soild_color_object(SolidColorObject object)
 {
-    GLint viewport[4];
-
     int number_vertices = object.get_vertices().size();
 
     double vertices[2 * number_vertices]; // each vertice has 2 doubles
