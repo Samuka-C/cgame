@@ -52,7 +52,7 @@ private:
     std::atomic<bool> running;
     std::atomic<bool> resized;
     GLuint shaderProgram;
-    WindowCoordinateSystemMode coordinateMode = WindowCoordinateSystemMode::TopLeft;
+    WindowCoordinateSystemMode coordinateMode;
 
     #pragma endregion
 

@@ -156,6 +156,7 @@ Window::Window(std::string title, int width, int height)
     running = false;
     resized = false;
     coordinateMode = WindowCoordinateSystemMode::TopLeft;
+    shaderProgram = 0;
 
     allWindows.push_front(this);
 }
