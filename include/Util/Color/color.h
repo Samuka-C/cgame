@@ -4,6 +4,9 @@
 #include <cstdint>
 #include <string>
 
+namespace cgame::util::color
+{
+
 /**
  * @brief stores the data about a color (with transparency)
  */
@@ -112,5 +115,7 @@ public:
 
     #pragma endregion
 };
+
+}
 
 #endif
