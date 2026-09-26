@@ -151,8 +151,11 @@ Window::Window(std::string title, int width, int height)
     this->title = title;
     this->width = width;
     this->height = height;
-    this->glfw_window_ptr = nullptr;
-    this->running = false;
+
+    glfw_window_ptr = nullptr;
+    running = false;
+    resized = false;
+    coordinateMode = WindowCoordinateSystemMode::TopLeft;
 
     allWindows.push_front(this);
 }
