@@ -3,6 +3,11 @@
 
 #include <Util/Angle/angle.h>
 
+using namespace cgame::util::angle;
+
+namespace cgame::util::vector
+{
+
 class Vec2d
 {
 public:
@@ -52,5 +57,7 @@ Vec2d operator*(double value, const Vec2d& vector);
 bool operator==(const Vec2d& first, const Vec2d& second);
 
 #pragma endregion
+
+}
 
 #endif
