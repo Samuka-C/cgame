@@ -9,6 +9,9 @@
 #include <string>
 #include <atomic>
 
+namespace cgame::ui
+{
+
 enum class WindowCoordinateSystemMode
 {
     /**
@@ -214,5 +217,7 @@ public:
 
     #pragma endregion
 };
+
+}
 
 #endif
