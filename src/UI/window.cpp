@@ -55,6 +55,7 @@ void Window::manage_window()
 void Window::render_window()
 {
     auto lastTime = std::chrono::steady_clock::now();
+    int nanoseconds_buffer = 0;
 
     reset_context();
 
@@ -70,16 +71,20 @@ void Window::render_window()
 
     while (!this->should_close())
     {
+        auto currentTime = std::chrono::steady_clock::now();
+        
+        auto delta_time = currentTime - lastTime;
+        int time_nanoseconds = delta_time.count() + nanoseconds_buffer;
+        int time_miliseconds = time_nanoseconds / 1000000;
+        nanoseconds_buffer = time_nanoseconds - time_miliseconds * 1000000;
+
+        update(time_miliseconds);
+
         if (resized)
         {
             glViewport(0, 0, width, height);
             resized = false;
         }
-
-        auto currentTime = std::chrono::steady_clock::now();
-        
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
-        update(duration);
 
         // swap buffers to draw the frame
         glfwSwapBuffers(glfw_window_ptr);
