@@ -1,8 +1,8 @@
-#include <Util/Vector/vector.h>
+#include <Util/Math/vector.h>
 
 #include <cmath>
 
-namespace cgame::util::vector
+namespace cgame::util::math
 {
 
 Vec2d::Vec2d(double x, double y)

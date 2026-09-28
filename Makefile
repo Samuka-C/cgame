@@ -41,10 +41,10 @@ $(BIN_DIR)/color.o: src/Util/Color/color.cpp | $(BIN_DIR)
 $(BIN_DIR)/fileReader.o: src/Util/File/fileReader.cpp | $(BIN_DIR)
 	$(CXX) $(INCLUDE) -c $< -o $@
 
-$(BIN_DIR)/vector.o: src/Util/Vector/vector.cpp | $(BIN_DIR)
+$(BIN_DIR)/vector.o: src/Util/Math/vector.cpp | $(BIN_DIR)
 	$(CXX) $(INCLUDE) -c $< -o $@
 
-$(BIN_DIR)/angle.o: src/Util/Angle/angle.cpp | $(BIN_DIR)
+$(BIN_DIR)/angle.o: src/Util/Math/angle.cpp | $(BIN_DIR)
 	$(CXX) $(INCLUDE) -c $< -o $@
 
 $(BIN_DIR)/glad.o: src/glad.c | $(BIN_DIR)

@@ -1,12 +1,12 @@
 #ifndef CGAME_DRAW_OBJECT
 #define CGAME_DRAW_OBJECT
 
-#include <Util/Vector/vector.h>
-#include <Util/Angle/angle.h>
+#include <Util/Math/vector.h>
+#include <Util/Math/angle.h>
 #include <Util/Color/color.h>
 #include <list>
 
-using namespace cgame::util::angle;
+using namespace cgame::util::math;
 
 namespace cgame::ui
 {

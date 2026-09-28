@@ -1,11 +1,9 @@
 #ifndef CGAME_VECTOR
 #define CGAME_VECTOR
 
-#include <Util/Angle/angle.h>
+#include <Util/Math/angle.h>
 
-using namespace cgame::util::angle;
-
-namespace cgame::util::vector
+namespace cgame::util::math
 {
 
 class Vec2d

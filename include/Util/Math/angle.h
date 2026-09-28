@@ -1,7 +1,7 @@
 #ifndef CGAME_ANGLE
 #define CGAME_ANGLE
 
-namespace cgame::util::angle
+namespace cgame::util::math
 {
 
 extern const double PI;
