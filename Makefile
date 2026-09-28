@@ -11,7 +11,13 @@ LIBS := -lglfw3 -lopengl32 -lgdi32 -luser32 -lkernel32
 
 rwildcard = $(foreach d,$(wildcard $1/*),$(call rwildcard,$d,$2)) $(wildcard $1/$2)
 
-SOURCES := $(call rwildcard,$(SRC_DIR),*.cpp)
+CPP_SOURCES := $(call rwildcard,$(SRC_DIR),*.cpp)
+C_SOURCES   := $(call rwildcard,$(SRC_DIR),*.c)
+
+CPP_OBJECTS := $(patsubst $(SRC_DIR)/%.cpp,$(BIN_DIR)/%.o,$(CPP_SOURCES))
+C_OBJECTS   := $(patsubst $(SRC_DIR)/%.c,$(BIN_DIR)/%.o,$(C_SOURCES))
+
+OBJECTS := $(CPP_OBJECTS) $(C_OBJECTS)
 
 OBJECTS := $(patsubst $(SRC_DIR)/%.cpp,$(BIN_DIR)/%.o,$(SOURCES))
 
