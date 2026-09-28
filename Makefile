@@ -21,13 +21,16 @@ OBJECTS := $(CPP_OBJECTS) $(C_OBJECTS)
 
 TARGET := $(BIN_DIR)/main$(EXE)
 
+# compile main.cpp to main.exe
 $(TARGET): $(OBJECTS) | $(BIN_DIR)
 	$(CXX) $(INCLUDE) $^ -o $@ $(LIBS)
 
+# compile all cpp files to object files
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(INCLUDE) -c $< -o $@
 
+# compile all c files to object files
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CXX) $(INCLUDE) -c $< -o $@
