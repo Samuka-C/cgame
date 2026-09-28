@@ -19,8 +19,6 @@ C_OBJECTS   := $(patsubst $(SRC_DIR)/%.c,$(BIN_DIR)/%.o,$(C_SOURCES))
 
 OBJECTS := $(CPP_OBJECTS) $(C_OBJECTS)
 
-OBJECTS := $(patsubst $(SRC_DIR)/%.cpp,$(BIN_DIR)/%.o,$(SOURCES))
-
 TARGET := $(BIN_DIR)/main$(EXE)
 
 $(TARGET): $(OBJECTS) | $(BIN_DIR)
