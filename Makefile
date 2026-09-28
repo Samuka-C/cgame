@@ -28,6 +28,10 @@ $(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(INCLUDE) -c $< -o $@
 
+$(BIN_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	$(CXX) $(INCLUDE) -c $< -o $@
+
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
 
