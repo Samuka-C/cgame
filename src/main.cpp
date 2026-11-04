@@ -1,9 +1,9 @@
 #include <UI/window.h>
 #include <Logger/logger.h>
+#include <Input/input.h>
 
 #include <thread>
-#include <atomic>
-#include <cmath>
+#include <format>
 #include <algorithm>
 
 using namespace cgame::ui;
@@ -59,6 +59,10 @@ private:
         draw_solid_color_object(rightPaddle);
         draw_solid_color_object(leftPaddle);
         draw_solid_color_object(ball);
+
+        auto mousePos = cgame::input::getMousePos(*this);
+        auto leftButton = cgame::input::isMouseKeyPressed(*this, cgame::input::MouseButton::LBUTTON);
+        set_title(std::format("AI pong - mouseX: {} - mouseY: {} - LeftMouseButton: {}", mousePos.x, mousePos.y, leftButton));
     }
 
 public:
