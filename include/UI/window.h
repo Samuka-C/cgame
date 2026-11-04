@@ -129,6 +129,8 @@ public:
 
     bool isRunning() const;
 
+    GLFWwindow* getGLFWPointer() const;
+
     #pragma endregion
 
     #pragma region set methods

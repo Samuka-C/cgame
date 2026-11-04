@@ -204,6 +204,11 @@ bool Window::isRunning() const
     return running;
 }
 
+GLFWwindow* Window::getGLFWPointer() const
+{
+    return glfw_window_ptr;
+}
+
 #pragma endregion
 
 #pragma region set methods
