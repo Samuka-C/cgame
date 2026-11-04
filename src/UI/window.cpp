@@ -72,6 +72,11 @@ void Window::render_window()
         window_resized
     );
 
+    glfwSetWindowFocusCallback(
+        glfw_window_ptr,
+        window_change_focus
+    );
+
     auto vertexShader = loadShader("src/UI/shaders/vertexShader.glsl", GL_VERTEX_SHADER);
     auto fragmentShader  = loadShader("src/UI/shaders/fragmentShader.glsl", GL_FRAGMENT_SHADER);
 
@@ -155,6 +160,13 @@ void Window::window_resized(GLFWwindow* glfw_window_ptr, int width, int height)
     window->resized = true;
 }
 
+void Window::window_change_focus(GLFWwindow* glfw_window_ptr, int focused)
+{
+    Window* window = static_cast<Window*>(glfwGetWindowUserPointer(glfw_window_ptr));
+
+    window->focused = static_cast<bool>(focused);
+}
+
 #pragma endregion
 
 #pragma region constructors and destructors
@@ -202,6 +214,11 @@ int Window::getHeight() const
 bool Window::isRunning() const
 {
     return running;
+}
+
+bool Window::isFocused() const
+{
+    return focused;
 }
 
 GLFWwindow* Window::getGLFWPointer() const

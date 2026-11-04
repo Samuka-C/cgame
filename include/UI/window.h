@@ -59,6 +59,7 @@ private:
     GLFWwindow* glfw_window_ptr;
     std::atomic<bool> running;
     std::atomic<bool> resized;
+    std::atomic<bool> focused;
     GLuint shaderProgram;
     WindowCoordinateSystemMode coordinateMode;
 
@@ -108,6 +109,11 @@ private:
      */
     static void window_resized(GLFWwindow* glfw_window_ptr, int width, int height);
 
+    /**
+     * @brief called when the window is focused or unfocused. 
+     */
+    static void window_change_focus(GLFWwindow* glfw_window_ptr, int focused);
+
     #pragma endregion
 
 public:
@@ -133,6 +139,8 @@ public:
     int getHeight() const;
 
     bool isRunning() const;
+
+    bool isFocused() const;
 
     GLFWwindow* getGLFWPointer() const;
 
