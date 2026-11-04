@@ -161,6 +161,8 @@ enum class MouseButton
 
 #pragma endregion
 
+#pragma region get input state
+
 /**
  * @brief tells if a key is being pressed down.
  * 
@@ -191,6 +193,8 @@ bool isMouseKeyPressed(Window& window, MouseButton button);
  * @param overrideMode If not set, the mouse coordinates will follow the coordinate system of the window
  */
 Vec2d getMousePos(Window& window, WindowCoordinateSystemMode overrideMode = WindowCoordinateSystemMode::None);
+
+#pragma endregion
 
 }
 
