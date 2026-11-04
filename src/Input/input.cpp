@@ -1,7 +1,6 @@
 #include <Input/input.h>
 #include <Logger/logger.h>
 
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace cgame::input
