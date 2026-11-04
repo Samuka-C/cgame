@@ -151,6 +151,13 @@ enum class KeyboardKey
     KPN0 = GLFW_KEY_KP_0,
 };
 
+enum class MouseButton
+{
+    LBUTTON = GLFW_MOUSE_BUTTON_LEFT,
+    RBUTTON = GLFW_MOUSE_BUTTON_RIGHT,
+    MBUTTON = GLFW_MOUSE_BUTTON_MIDDLE,
+};
+
 #pragma endregion
 
 /**
@@ -163,6 +170,17 @@ enum class KeyboardKey
  * @param key the keyboard key being verified.
  */
 bool isKeyPressed(Window window, KeyboardKey key);
+
+/**
+ * @brief tells if a mouse button is being pressed down.
+ * 
+ * @attention the returned state of the key might be different from reality if the window provided is not in focus.
+ * 
+ * @param window the window where the last state of the mouse is pulled from.
+ * 
+ * @param button the mouse button being verified.
+ */
+bool isMouseKeyPressed(Window window, MouseButton button);
 
 }
 
