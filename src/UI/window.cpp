@@ -237,6 +237,12 @@ void Window::set_size(int width, int height)
 
 void Window::set_coordinate_system(WindowCoordinateSystemMode newMode)
 {
+    if (newMode == WindowCoordinateSystemMode::None)
+    {
+        log_warning("tried to set the coordinate system of the window as None");
+        return;
+    }
+
     coordinateMode = newMode;
 }
 

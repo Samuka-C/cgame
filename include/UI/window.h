@@ -15,6 +15,11 @@ namespace cgame::ui
 enum class WindowCoordinateSystemMode
 {
     /**
+     * @attention can't be used for the mode of windows, only for checks. 
+     */
+    None,
+
+    /**
      * @brief the 0, 0 starts at the bottom left corner with positive X to the right and positive Y to the top
      */
     BottomLeft,
