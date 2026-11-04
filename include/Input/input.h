@@ -170,7 +170,7 @@ enum class MouseButton
  * 
  * @param key the keyboard key being verified.
  */
-bool isKeyPressed(Window window, KeyboardKey key);
+bool isKeyPressed(Window& window, KeyboardKey key);
 
 /**
  * @brief tells if a mouse button is being pressed down.
@@ -181,7 +181,7 @@ bool isKeyPressed(Window window, KeyboardKey key);
  * 
  * @param button the mouse button being verified.
  */
-bool isMouseKeyPressed(Window window, MouseButton button);
+bool isMouseKeyPressed(Window& window, MouseButton button);
 
 /**
  * @brief returns the mouse position.
@@ -190,7 +190,7 @@ bool isMouseKeyPressed(Window window, MouseButton button);
  * 
  * @param overrideMode If not set, the mouse coordinates will follow the coordinate system of the window
  */
-Vec2d getMousePos(Window window, WindowCoordinateSystemMode overrideMode = WindowCoordinateSystemMode::None);
+Vec2d getMousePos(Window& window, WindowCoordinateSystemMode overrideMode = WindowCoordinateSystemMode::None);
 
 }
 
