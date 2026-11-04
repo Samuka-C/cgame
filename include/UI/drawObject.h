@@ -7,6 +7,7 @@
 #include <list>
 
 using namespace cgame::util::math;
+using namespace cgame::util::color;
 
 namespace cgame::ui
 {

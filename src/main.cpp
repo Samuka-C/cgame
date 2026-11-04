@@ -6,6 +6,8 @@
 #include <cmath>
 #include <algorithm>
 
+using namespace cgame::ui;
+
 class PongWindow : public Window
 {
 private:

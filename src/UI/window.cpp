@@ -11,7 +11,7 @@
 using namespace cgame::logger;
 using namespace cgame::ui::shaders;
 using namespace cgame::util::color;
-using namespace cgame::util::vector;
+using namespace cgame::util::math;
 
 namespace cgame::ui
 {
