@@ -166,27 +166,45 @@ enum class MouseButton
 /**
  * @brief tells if a key is being pressed down.
  * 
- * @attention the returned state of the key might be different from reality if the window provided is not in focus.
- * 
- * @param window the window where the last state of the key is pulled from.
+ * @attention returns the state of the key on the currently focused window. if there are no focused windows, returns false.
  * 
  * @param key the keyboard key being verified.
  */
-bool isKeyPressed(Window& window, KeyboardKey key);
+bool isKeyPressed(KeyboardKey key);
+
+/**
+ * @brief tells if a key is being pressed down.
+ * 
+ * @attention the returned state of the key might be different from reality if the window provided is not in focus.
+ * 
+ * @param key the keyboard key being verified.
+ * 
+ * @param window the window where the last state of the key is pulled from.
+ */
+bool isKeyPressed(KeyboardKey key, Window& window);
+
+/**
+ * @brief tells if a mouse button is being pressed down.
+ * 
+ * @attention returns the state of the key on the currently focused window. if there are no focused windows, returns false.
+ * 
+ * @param button the mouse button being verified.
+ */
+bool isMouseKeyPressed(MouseButton button);
 
 /**
  * @brief tells if a mouse button is being pressed down.
  * 
  * @attention the returned state of the key might be different from reality if the window provided is not in focus.
  * 
- * @param window the window where the last state of the mouse is pulled from.
- * 
  * @param button the mouse button being verified.
+ * 
+ * @param window the window where the last state of the mouse is pulled from.
  */
-bool isMouseKeyPressed(Window& window, MouseButton button);
+bool isMouseKeyPressed(MouseButton button, Window& window);
 
 /**
- * @brief returns the mouse position.
+ * @brief returns the mouse position. relative to the window.
  * 
  * @param window the window to pull the mouse location.
  * 

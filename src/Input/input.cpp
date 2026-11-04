@@ -6,12 +6,32 @@
 namespace cgame::input
 {
 
-bool isKeyPressed(Window& window, KeyboardKey key)
+bool isKeyPressed(KeyboardKey key)
+{
+    auto window = Window::getFocusedWindow();
+
+    if (window == NULL)
+        return false;
+
+    return isKeyPressed(key, *window);
+}
+
+bool isKeyPressed(KeyboardKey key, Window& window)
 {
     return glfwGetKey(window.getGLFWPointer(), static_cast<int>(key));
 }
 
-bool isMouseKeyPressed(Window& window, MouseButton button)
+bool isMouseKeyPressed(MouseButton button)
+{
+    auto window = Window::getFocusedWindow();
+
+    if (window == NULL)
+        return false;
+
+    return isMouseKeyPressed(button, *window);
+}
+
+bool isMouseKeyPressed(MouseButton button, Window& window)
 {
     return glfwGetMouseButton(window.getGLFWPointer(), static_cast<int>(button));
 }
