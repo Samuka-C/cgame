@@ -63,6 +63,7 @@ void Window::manage_window()
 void Window::render_window()
 {
     auto lastTime = std::chrono::steady_clock::now();
+    int nanoseconds_buffer = 0;
 
     reset_context();
 
@@ -78,16 +79,20 @@ void Window::render_window()
 
     while (!this->should_close())
     {
+        auto currentTime = std::chrono::steady_clock::now();
+        
+        auto delta_time = currentTime - lastTime;
+        int time_nanoseconds = delta_time.count() + nanoseconds_buffer;
+        int time_miliseconds = time_nanoseconds / 1000000;
+        nanoseconds_buffer = time_nanoseconds - time_miliseconds * 1000000;
+
+        update(time_miliseconds);
+
         if (resized)
         {
             glViewport(0, 0, width, height);
             resized = false;
         }
-
-        auto currentTime = std::chrono::steady_clock::now();
-        
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
-        update(duration);
 
         // swap buffers to draw the frame
         glfwSwapBuffers(glfw_window_ptr);
@@ -164,6 +169,7 @@ Window::Window(std::string title, int width, int height)
     running = false;
     resized = false;
     coordinateMode = WindowCoordinateSystemMode::TopLeft;
+    shaderProgram = 0;
 
     allWindows.push_front(this);
 }
@@ -246,10 +252,8 @@ void Window::start()
     manage_thread.detach();
 }
 
-void Window::draw_soild_color_object(SolidColorObject object)
+void Window::draw_solid_color_object(SolidColorObject object)
 {
-    GLint viewport[4];
-
     int number_vertices = object.get_vertices().size();
 
     double vertices[2 * number_vertices]; // each vertice has 2 doubles

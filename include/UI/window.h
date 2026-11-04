@@ -55,7 +55,7 @@ private:
     std::atomic<bool> running;
     std::atomic<bool> resized;
     GLuint shaderProgram;
-    WindowCoordinateSystemMode coordinateMode = WindowCoordinateSystemMode::TopLeft;
+    WindowCoordinateSystemMode coordinateMode;
 
     #pragma endregion
 
@@ -160,7 +160,7 @@ public:
      */
     void start();
 
-    void draw_soild_color_object(SolidColorObject object);
+    void draw_solid_color_object(SolidColorObject object);
 
     /**
      * @brief draws a color in the background of the window
