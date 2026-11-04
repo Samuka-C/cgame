@@ -156,12 +156,11 @@ enum class KeyboardKey
 /**
  * @brief tells if a key is being pressed down.
  * 
- * @param window the window where the last state of the key is pulled from. 
- * that is, if a key was pressed down when a window A was in focus, 
- * and then said window is minimized and the key is released. 
- * this method will return true if window A is passed, but false if another window is passed.
+ * @attention the returned state of the key might be different from reality if the window provided is not in focus.
  * 
- * @param key the key being verified.
+ * @param window the window where the last state of the key is pulled from.
+ * 
+ * @param key the keyboard key being verified.
  */
 bool isKeyPressed(Window window, KeyboardKey key);
 
