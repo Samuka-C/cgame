@@ -61,7 +61,7 @@ private:
         draw_solid_color_object(ball);
 
         auto mousePos = cgame::input::getMousePos(*this);
-        auto leftButton = cgame::input::isMouseKeyPressed(*this, cgame::input::MouseButton::LBUTTON);
+        auto leftButton = cgame::input::isMouseKeyPressed(cgame::input::MouseButton::LBUTTON, *this);
         set_title(std::format("AI pong - mouseX: {} - mouseY: {} - LeftMouseButton: {}", mousePos.x, mousePos.y, leftButton));
     }
 
