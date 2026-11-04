@@ -476,6 +476,77 @@ Window* Window::getFocusedWindow()
     return NULL;
 }
 
+Vec2d convertFromTopLeftTo(WindowCoordinateSystemMode modeTo, Vec2d coordsFromTopLeft, int width, int height)
+{
+    if (modeTo == WindowCoordinateSystemMode::None)
+        return Vec2d(0, 0);
+
+    if (modeTo == WindowCoordinateSystemMode::TopLeft)
+        return coordsFromTopLeft;
+
+    Vec2d newCoords(0, 0); 
+
+    switch (modeTo)
+    {
+    case WindowCoordinateSystemMode::BottomLeft:
+        newCoords.x = coordsFromTopLeft.x;
+        newCoords.y = height - coordsFromTopLeft.y;
+        break;
+    case WindowCoordinateSystemMode::BottomRight:
+        newCoords.x = width - coordsFromTopLeft.x;
+        newCoords.y = height - coordsFromTopLeft.y;
+        break;
+    case WindowCoordinateSystemMode::Center:
+        newCoords.x = coordsFromTopLeft.x - width / 2;
+        newCoords.y = height / 2 - coordsFromTopLeft.y;
+        break;
+    case WindowCoordinateSystemMode::TopRight:
+        newCoords.x = width - coordsFromTopLeft.x;
+        newCoords.y = coordsFromTopLeft.y;
+        break;
+    }
+
+    return newCoords;
+}
+
+Vec2d convertToTopLeftFrom(WindowCoordinateSystemMode modeFrom, Vec2d coordsFrom, int width, int height)
+{
+    if (modeFrom == WindowCoordinateSystemMode::None)
+        return Vec2d(0, 0);
+
+    if (modeFrom == WindowCoordinateSystemMode::TopLeft)
+        return coordsFrom;
+
+    Vec2d newCoords(0, 0);
+
+    switch (modeFrom)
+    {
+    case WindowCoordinateSystemMode::BottomLeft:
+        newCoords.x = coordsFrom.x;
+        newCoords.y = height - coordsFrom.y;
+        break;
+    case WindowCoordinateSystemMode::BottomRight:
+        newCoords.x = width - coordsFrom.x;
+        newCoords.y = height - coordsFrom.y;
+        break;
+    case WindowCoordinateSystemMode::Center:
+        newCoords.x = coordsFrom.x + width / 2;
+        newCoords.y = height / 2 - coordsFrom.y;
+        break;
+    case WindowCoordinateSystemMode::TopRight:
+        newCoords.x = width - coordsFrom.x;
+        newCoords.y = coordsFrom.y;
+        break;
+    }
+
+    return newCoords;
+}
+
+Vec2d Window::convertCoordinates(WindowCoordinateSystemMode modeFrom, WindowCoordinateSystemMode modeTo, Vec2d coordsFrom, int width, int height)
+{
+    return convertFromTopLeftTo(modeTo, convertToTopLeftFrom(modeFrom, coordsFrom, width, height), width, height);
+}
+
 #pragma endregion
 
 }

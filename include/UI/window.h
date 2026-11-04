@@ -237,7 +237,24 @@ public:
      * 
      * @return NULL if there are no windows (created by this class) focused
      */
-    static Window* getFocusedWindow();  
+    static Window* getFocusedWindow();
+
+    /**
+     * @brief converts a coordinate from one system to another
+     * 
+     * @param modeFrom the coordinate system of coordsFrom
+     * 
+     * @param modeTo the coordinate system to convert to
+     * 
+     * @param coordsFrom the coordinates to convert
+     * 
+     * @param width width of the window
+     * 
+     * @param height height of the window
+     * 
+     * @return a Vec2d coresponding to coordsFrom in the modeTo system
+     */
+    static Vec2d convertCoordinates(WindowCoordinateSystemMode modeFrom, WindowCoordinateSystemMode modeTo, Vec2d coordsFrom, int width, int height);
 
     #pragma endregion
 };
