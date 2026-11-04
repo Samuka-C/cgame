@@ -136,6 +136,8 @@ public:
 
     GLFWwindow* getGLFWPointer() const;
 
+    WindowCoordinateSystemMode getCoordinateSystem() const;
+
     #pragma endregion
 
     #pragma region set methods

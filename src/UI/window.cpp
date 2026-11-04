@@ -209,6 +209,11 @@ GLFWwindow* Window::getGLFWPointer() const
     return glfw_window_ptr;
 }
 
+WindowCoordinateSystemMode Window::getCoordinateSystem() const
+{
+    return coordinateMode;
+}
+
 #pragma endregion
 
 #pragma region set methods
