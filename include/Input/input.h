@@ -11,6 +11,23 @@ namespace cgame::input
 
 #pragma region keys
 
+enum class KeyPressAction
+{
+    PRESS   = GLFW_PRESS,
+    RELEASE = GLFW_RELEASE,
+    REPEAT  = GLFW_REPEAT,
+};
+
+enum class KeyPressMod
+{
+    SHIFT    = GLFW_MOD_SHIFT,
+    CONTROL  = GLFW_MOD_CONTROL,
+    ALT      = GLFW_MOD_ALT,
+    SUPER    = GLFW_MOD_SUPER,
+    CAPSLOCK = GLFW_MOD_CAPS_LOCK,
+    NUMLOCK  = GLFW_MOD_NUM_LOCK,
+};
+
 enum class KeyboardKey
 {
     // Characters
@@ -211,6 +228,73 @@ bool isMouseKeyPressed(MouseButton button, Window& window);
  * @param overrideMode If not set, the mouse coordinates will follow the coordinate system of the window
  */
 Vec2d getMousePos(Window& window, WindowCoordinateSystemMode overrideMode = WindowCoordinateSystemMode::None);
+
+#pragma endregion
+
+#pragma region set callback methods
+
+/**
+ * @brief function type for key press callback
+ * 
+ * @param window the window that called the method when the event happened (while that window was focused)
+ * 
+ * @param key the key that was pressed (or released)
+ * 
+ * @param action the type of action on the key
+ * 
+ * @param mods other keys that modify the input, such as shift, control, alt... in form of binary flags.
+ * see `cgame::input::KeyPressMod`
+ */
+using KeyPressCallbackMethod = void (*) (Window& window, KeyboardKey key, KeyPressAction action, int mods);
+
+/**
+ * @brief function type for mouse press callback
+ * 
+ * @param window the window that called the method when the event happened (while that window was focused)
+ * 
+ * @param button the mouse button that was pressed (or released)
+ * 
+ * @param action the type of action on the key
+ * 
+ * @param mods other keys that modify the input, such as shift, control, alt... in form of binary flags.
+ * see `cgame::input::KeyPressMod`
+ */
+using MousePressCallbackMethod = void (*) (Window& window, MouseButton button, KeyPressAction action, int mods);
+
+/**
+ * @brief function type for cursor move callback
+ * 
+ * @param window the window that called the method when the event happened (while that window was focused)
+ * 
+ * @param oldPosition previous position of the mouse (using the window coordinate system)
+ * 
+ * @param newPosition new position of the mouse (using the window coordinate system)
+ */
+using CursorMoveCallbackMethod = void (*) (Window& window, Vec2d oldPosition, Vec2d newPosition);
+
+/**
+ * @brief sets a function to be called when a key is pressed when a certain window is in focus.
+ * 
+ * @attention if callback is set to NULL, it removes the callback from the window. making so nothing is called when the event happens.
+ * calling this method after a callback already been asigned will overwrite the last callback.
+ */
+void setKeyPressCallback(Window& window, KeyPressCallbackMethod callback);
+
+/**
+ * @brief sets a function to be called when a mouse button is pressed when a certain window is in focus.
+ * 
+ * @attention if callback is set to NULL, it removes the callback from the window. making so nothing is called when the event happens.
+ * calling this method after a callback already been asigned will overwrite the last callback.
+ */
+void setMousePressCallback(Window& window, MousePressCallbackMethod callback);
+
+/**
+ * @brief sets a function to be called when the mouse is moved when a certain window is in focus.
+ * 
+ * @attention if callback is set to NULL, it removes the callback from the window. making so nothing is called when the event happens.
+ * calling this method after a callback already been asigned will overwrite the last callback.
+ */
+void setMouseMoveCallback(Window& window, CursorMoveCallbackMethod callback);
 
 #pragma endregion
 
