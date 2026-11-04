@@ -2,6 +2,7 @@
 #define CGAME_INPUT
 
 #include <UI/window.h>
+#include <Util/Math/vector.h>
 
 using namespace cgame::ui;
 
@@ -181,6 +182,15 @@ bool isKeyPressed(Window window, KeyboardKey key);
  * @param button the mouse button being verified.
  */
 bool isMouseKeyPressed(Window window, MouseButton button);
+
+/**
+ * @brief returns the mouse position.
+ * 
+ * @param window the window to pull the mouse location.
+ * 
+ * @param overrideMode If not set, the mouse coordinates will follow the coordinate system of the window
+ */
+Vec2d getMousePos(Window window, WindowCoordinateSystemMode overrideMode = WindowCoordinateSystemMode::None);
 
 }
 
