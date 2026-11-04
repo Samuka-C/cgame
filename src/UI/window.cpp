@@ -8,6 +8,14 @@
 #include <list>
 #include <cmath>
 
+using namespace cgame::logger;
+using namespace cgame::ui::shaders;
+using namespace cgame::util::color;
+using namespace cgame::util::vector;
+
+namespace cgame::ui
+{
+
 static std::atomic<bool> glfw_initialized = false;
 static std::atomic<bool> glad_initialized = false;
 static std::mutex glfw_window_creation_mutex;
@@ -425,3 +433,5 @@ bool Window::isAnyWindowRunning()
 }
 
 #pragma endregion
+
+}

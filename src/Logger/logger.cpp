@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+namespace cgame::logger
+{
+
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
 #define ANSI_COLOR_YELLOW  "\x1b[33m"
@@ -73,4 +76,6 @@ void logErrorCaller(const char* file, int line, const char* func, const char* fm
     printf("%sERROR!! (%s - %s() - line %d): %s%s\n", ANSI_COLOR_RED, file, func, line, msg, ANSI_COLOR_RESET);
 
     free(msg);
+}
+
 }

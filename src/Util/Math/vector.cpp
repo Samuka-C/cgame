@@ -1,6 +1,9 @@
-#include <Util/Vector/vector.h>
+#include <Util/Math/vector.h>
 
 #include <cmath>
+
+namespace cgame::util::math
+{
 
 Vec2d::Vec2d(double x, double y)
 {
@@ -74,3 +77,5 @@ bool operator==(const Vec2d& first, const Vec2d& second)
 }
 
 #pragma endregion
+
+}

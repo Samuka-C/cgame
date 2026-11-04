@@ -4,6 +4,11 @@
 #include <cstdint>
 #include <cmath>
 
+using namespace cgame::logger;
+
+namespace cgame::util::color
+{
+
 #pragma region helper methods
 
 uint8_t from_float(float value)
@@ -228,3 +233,5 @@ const Color Color::purple  = Color::fromRGB(127,   0, 255);
 const Color Color::pink    = Color::fromRGB(255,   0, 127);
 
 #pragma endregion
+
+}

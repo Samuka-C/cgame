@@ -1,6 +1,9 @@
-#include <Util/Angle/angle.h>
+#include <Util/Math/angle.h>
 
 #include <cmath>
+
+namespace cgame::util::math
+{
 
 const double PI = 2 * std::acos(0);
 
@@ -112,3 +115,5 @@ bool operator==(const Angle& first, const Angle& second)
 }
 
 #pragma endregion
+
+}

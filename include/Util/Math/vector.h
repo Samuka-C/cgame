@@ -1,7 +1,10 @@
 #ifndef CGAME_VECTOR
 #define CGAME_VECTOR
 
-#include <Util/Angle/angle.h>
+#include <Util/Math/angle.h>
+
+namespace cgame::util::math
+{
 
 class Vec2d
 {
@@ -52,5 +55,7 @@ Vec2d operator*(double value, const Vec2d& vector);
 bool operator==(const Vec2d& first, const Vec2d& second);
 
 #pragma endregion
+
+}
 
 #endif

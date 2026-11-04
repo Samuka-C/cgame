@@ -3,9 +3,14 @@
 
 #include <string>
 
+namespace cgame::util::file
+{
+
 /**
  * @brief reads a text file and returns the string stored
  */
 std::string read_file(const std::string& path);
+
+}
 
 #endif

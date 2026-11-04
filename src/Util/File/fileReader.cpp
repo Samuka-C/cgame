@@ -4,6 +4,11 @@
 #include <fstream>
 #include <sstream>
 
+using namespace cgame::logger;
+
+namespace cgame::util::file
+{
+
 std::string read_file(const std::string& path)
 {
     std::ifstream file(path);
@@ -18,4 +23,6 @@ std::string read_file(const std::string& path)
     buffer << file.rdbuf();
 
     return buffer.str();
+}
+
 }
