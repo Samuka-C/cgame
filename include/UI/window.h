@@ -232,6 +232,13 @@ public:
      */
     static bool isAnyWindowRunning();
 
+    /**
+     * @brief returns a pointer to the currently focused window.
+     * 
+     * @return NULL if there are no windows (created by this class) focused
+     */
+    static Window* getFocusedWindow();  
+
     #pragma endregion
 };
 

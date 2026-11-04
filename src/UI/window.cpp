@@ -465,6 +465,17 @@ bool Window::isAnyWindowRunning()
     return false;
 }
 
+Window* Window::getFocusedWindow()
+{
+    for (auto window : allWindows)
+    {
+        if (window->focused)
+            return window;
+    }
+
+    return NULL;
+}
+
 #pragma endregion
 
 }
