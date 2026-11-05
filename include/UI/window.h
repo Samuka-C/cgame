@@ -15,6 +15,11 @@ namespace cgame::ui
 enum class WindowCoordinateSystemMode
 {
     /**
+     * @attention can't be used for the mode of windows, only for checks. 
+     */
+    None,
+
+    /**
      * @brief the 0, 0 starts at the bottom left corner with positive X to the right and positive Y to the top
      */
     BottomLeft,
@@ -54,6 +59,7 @@ private:
     GLFWwindow* glfw_window_ptr;
     std::atomic<bool> running;
     std::atomic<bool> resized;
+    std::atomic<bool> focused;
     GLuint shaderProgram;
     WindowCoordinateSystemMode coordinateMode;
 
@@ -103,6 +109,11 @@ private:
      */
     static void window_resized(GLFWwindow* glfw_window_ptr, int width, int height);
 
+    /**
+     * @brief called when the window is focused or unfocused. 
+     */
+    static void window_change_focus(GLFWwindow* glfw_window_ptr, int focused);
+
     #pragma endregion
 
 public:
@@ -128,6 +139,12 @@ public:
     int getHeight() const;
 
     bool isRunning() const;
+
+    bool isFocused() const;
+
+    GLFWwindow* getGLFWPointer() const;
+
+    WindowCoordinateSystemMode getCoordinateSystem() const;
 
     #pragma endregion
 
@@ -158,7 +175,7 @@ public:
      * 
      * @attention should be called from the main thread!
      */
-    void start();
+    virtual void start();
 
     void draw_solid_color_object(SolidColorObject object);
 
@@ -214,6 +231,30 @@ public:
      * @brief tells if any window (created by this class) is currently running.
      */
     static bool isAnyWindowRunning();
+
+    /**
+     * @brief returns a pointer to the currently focused window.
+     * 
+     * @return NULL if there are no windows (created by this class) focused
+     */
+    static Window* getFocusedWindow();
+
+    /**
+     * @brief converts a coordinate from one system to another
+     * 
+     * @param modeFrom the coordinate system of coordsFrom
+     * 
+     * @param modeTo the coordinate system to convert to
+     * 
+     * @param coordsFrom the coordinates to convert
+     * 
+     * @param width width of the window
+     * 
+     * @param height height of the window
+     * 
+     * @return a Vec2d coresponding to coordsFrom in the modeTo system
+     */
+    static Vec2d convertCoordinates(WindowCoordinateSystemMode modeFrom, WindowCoordinateSystemMode modeTo, Vec2d coordsFrom, int width, int height);
 
     #pragma endregion
 };

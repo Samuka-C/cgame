@@ -5,6 +5,12 @@
 namespace cgame::util::math
 {
 
+Vec2d::Vec2d()
+{
+    this->x = 0.0;
+    this->y = 0.0;
+}
+
 Vec2d::Vec2d(double x, double y)
 {
     this->x = x;

@@ -1,5 +1,6 @@
 EXE := .exe # swap to `EXE := ` for linux
 CXX := g++ # swap for your prefered c++ compiler
+CXXFLAGS := -std=c++20
 
 BIN_DIR := bin
 SRC_DIR := src
@@ -23,17 +24,17 @@ TARGET := $(BIN_DIR)/main$(EXE)
 
 # compile main.cpp to main.exe
 $(TARGET): $(OBJECTS) | $(BIN_DIR)
-	$(CXX) $(INCLUDE) $^ -o $@ $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCLUDE) $^ -o $@ $(LIBS)
 
 # compile all cpp files to object files
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(INCLUDE) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
 # compile all c files to object files
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CXX) $(INCLUDE) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)

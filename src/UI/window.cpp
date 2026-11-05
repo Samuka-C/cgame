@@ -49,6 +49,8 @@ void Window::manage_window()
     // sets the window object as the user pointer for the window pointer
     glfwSetWindowUserPointer(glfw_window_ptr, this);
 
+    running = true;
+
     std::thread loop_thread(&Window::render_window, this);
     loop_thread.detach();
 
@@ -70,6 +72,11 @@ void Window::render_window()
     glfwSetFramebufferSizeCallback(
         glfw_window_ptr,
         window_resized
+    );
+
+    glfwSetWindowFocusCallback(
+        glfw_window_ptr,
+        window_change_focus
     );
 
     auto vertexShader = loadShader("src/UI/shaders/vertexShader.glsl", GL_VERTEX_SHADER);
@@ -155,6 +162,13 @@ void Window::window_resized(GLFWwindow* glfw_window_ptr, int width, int height)
     window->resized = true;
 }
 
+void Window::window_change_focus(GLFWwindow* glfw_window_ptr, int focused)
+{
+    Window* window = static_cast<Window*>(glfwGetWindowUserPointer(glfw_window_ptr));
+
+    window->focused = static_cast<bool>(focused);
+}
+
 #pragma endregion
 
 #pragma region constructors and destructors
@@ -204,6 +218,21 @@ bool Window::isRunning() const
     return running;
 }
 
+bool Window::isFocused() const
+{
+    return focused;
+}
+
+GLFWwindow* Window::getGLFWPointer() const
+{
+    return glfw_window_ptr;
+}
+
+WindowCoordinateSystemMode Window::getCoordinateSystem() const
+{
+    return coordinateMode;
+}
+
 #pragma endregion
 
 #pragma region set methods
@@ -232,6 +261,12 @@ void Window::set_size(int width, int height)
 
 void Window::set_coordinate_system(WindowCoordinateSystemMode newMode)
 {
+    if (newMode == WindowCoordinateSystemMode::None)
+    {
+        log_warning("tried to set the coordinate system of the window as None");
+        return;
+    }
+
     coordinateMode = newMode;
 }
 
@@ -247,7 +282,6 @@ void Window::start()
         return;
     }
 
-    running = true;
     std::thread manage_thread(&Window::manage_window, this);
     manage_thread.detach();
 }
@@ -430,6 +464,88 @@ bool Window::isAnyWindowRunning()
     }
 
     return false;
+}
+
+Window* Window::getFocusedWindow()
+{
+    for (auto window : allWindows)
+    {
+        if (window->focused)
+            return window;
+    }
+
+    return NULL;
+}
+
+Vec2d convertFromTopLeftTo(WindowCoordinateSystemMode modeTo, Vec2d coordsFromTopLeft, int width, int height)
+{
+    if (modeTo == WindowCoordinateSystemMode::None)
+        return Vec2d(0, 0);
+
+    if (modeTo == WindowCoordinateSystemMode::TopLeft)
+        return coordsFromTopLeft;
+
+    Vec2d newCoords(0, 0); 
+
+    switch (modeTo)
+    {
+    case WindowCoordinateSystemMode::BottomLeft:
+        newCoords.x = coordsFromTopLeft.x;
+        newCoords.y = height - coordsFromTopLeft.y;
+        break;
+    case WindowCoordinateSystemMode::BottomRight:
+        newCoords.x = width - coordsFromTopLeft.x;
+        newCoords.y = height - coordsFromTopLeft.y;
+        break;
+    case WindowCoordinateSystemMode::Center:
+        newCoords.x = coordsFromTopLeft.x - width / 2;
+        newCoords.y = height / 2 - coordsFromTopLeft.y;
+        break;
+    case WindowCoordinateSystemMode::TopRight:
+        newCoords.x = width - coordsFromTopLeft.x;
+        newCoords.y = coordsFromTopLeft.y;
+        break;
+    }
+
+    return newCoords;
+}
+
+Vec2d convertToTopLeftFrom(WindowCoordinateSystemMode modeFrom, Vec2d coordsFrom, int width, int height)
+{
+    if (modeFrom == WindowCoordinateSystemMode::None)
+        return Vec2d(0, 0);
+
+    if (modeFrom == WindowCoordinateSystemMode::TopLeft)
+        return coordsFrom;
+
+    Vec2d newCoords(0, 0);
+
+    switch (modeFrom)
+    {
+    case WindowCoordinateSystemMode::BottomLeft:
+        newCoords.x = coordsFrom.x;
+        newCoords.y = height - coordsFrom.y;
+        break;
+    case WindowCoordinateSystemMode::BottomRight:
+        newCoords.x = width - coordsFrom.x;
+        newCoords.y = height - coordsFrom.y;
+        break;
+    case WindowCoordinateSystemMode::Center:
+        newCoords.x = coordsFrom.x + width / 2;
+        newCoords.y = height / 2 - coordsFrom.y;
+        break;
+    case WindowCoordinateSystemMode::TopRight:
+        newCoords.x = width - coordsFrom.x;
+        newCoords.y = coordsFrom.y;
+        break;
+    }
+
+    return newCoords;
+}
+
+Vec2d Window::convertCoordinates(WindowCoordinateSystemMode modeFrom, WindowCoordinateSystemMode modeTo, Vec2d coordsFrom, int width, int height)
+{
+    return convertFromTopLeftTo(modeTo, convertToTopLeftFrom(modeFrom, coordsFrom, width, height), width, height);
 }
 
 #pragma endregion
