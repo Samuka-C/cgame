@@ -12,6 +12,8 @@ public:
     double x;
     double y;
 
+    Vec2d();
+
     Vec2d(double x, double y);
 
     #pragma region get methods
