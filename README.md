@@ -20,7 +20,7 @@ with: `git submodule add git@github.com:Samuka-C/cgame.git cgame`
 glfw-3.4 - https://www.glfw.org/download
 *(the version used is the 3.4. I am not sure if more recent versions will work)*
 
-a c compiler *(probably any will do)*
+a Cpp compiler *(probably any will do)*
 
 ### Adjust CGame MakeFile
 
