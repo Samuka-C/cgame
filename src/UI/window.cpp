@@ -2,6 +2,7 @@
 #include <Logger/logger.h>
 #include <UI/shaders/shaderLoader.h>
 
+#include <format>
 #include <mutex>
 #include <chrono>
 #include <thread>
@@ -79,8 +80,8 @@ void Window::render_window()
         window_change_focus
     );
 
-    auto vertexShader = loadShader("src/UI/shaders/vertexShader.glsl", GL_VERTEX_SHADER);
-    auto fragmentShader  = loadShader("src/UI/shaders/fragmentShader.glsl", GL_FRAGMENT_SHADER);
+    auto vertexShader = loadShader(std::format("{}/src/UI/shaders/vertexShader.glsl", CGAME_ROOT), GL_VERTEX_SHADER);
+    auto fragmentShader  = loadShader(std::format("{}/src/UI/shaders/fragmentShader.glsl", CGAME_ROOT), GL_FRAGMENT_SHADER);
 
     shaderProgram = assembleShaderProgram({vertexShader, fragmentShader});
 

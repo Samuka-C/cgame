@@ -4,6 +4,8 @@ CC := gcc
 CXXFLAGS := -std=c++20
 CFLAGS := -std=c17
 
+CXXFLAGS += -DCGAME_ROOT=\"$(CURDIR)\"
+
 BIN_DIR := bin
 SRC_DIR := src
 
