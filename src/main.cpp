@@ -7,6 +7,7 @@
 #include <algorithm>
 
 using namespace cgame::ui;
+using namespace cgame::logger;
 
 class PongWindow : public Window
 {
@@ -65,6 +66,39 @@ private:
         set_title(std::format("AI pong - mouseX: {} - mouseY: {} - LeftMouseButton: {}", mousePos.x, mousePos.y, leftButton));
     }
 
+    static void mouseButtonEvent(Window& window, cgame::input::MouseButton button, cgame::input::KeyPressAction action, int mods)
+    {
+        std::string report = "mouse event - ";
+
+        switch (button)
+        {
+        case cgame::input::MouseButton::LBUTTON:
+            report += "left mouse button - ";
+            break;
+        case cgame::input::MouseButton::RBUTTON:
+            report += "right mouse button - ";
+            break;
+        case cgame::input::MouseButton::MBUTTON:
+            report += "middle mouse button - ";
+            break;
+        }
+
+        switch (action)
+        {
+        case cgame::input::KeyPressAction::PRESS:
+            report += "pressed!";
+            break;
+        case cgame::input::KeyPressAction::RELEASE:
+            report += "released!";
+            break;
+        case cgame::input::KeyPressAction::REPEAT:
+            report += "repeated!";
+            break;
+        }
+
+        log_info(report.c_str());
+    }
+
 public:
     PongWindow(std::string title, int width, int height, Color color) : 
         Window(title, width, height), 
@@ -78,7 +112,16 @@ public:
         leftPaddle.set_position(10, height / 2);
         rightPaddle.set_position(width - 10, height / 2);
         ball.set_position(width / 2, height / 2);
-    }   
+    } 
+    
+    void start() override
+    {
+        Window::start();
+
+        while (!isRunning());
+
+        cgame::input::setMousePressCallback(*this, mouseButtonEvent);
+    }
 };
 
 int main()
