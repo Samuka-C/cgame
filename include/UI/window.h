@@ -175,7 +175,7 @@ public:
      * 
      * @attention should be called from the main thread!
      */
-    void start();
+    virtual void start();
 
     void draw_solid_color_object(SolidColorObject object);
 

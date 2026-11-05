@@ -49,6 +49,8 @@ void Window::manage_window()
     // sets the window object as the user pointer for the window pointer
     glfwSetWindowUserPointer(glfw_window_ptr, this);
 
+    running = true;
+
     std::thread loop_thread(&Window::render_window, this);
     loop_thread.detach();
 
@@ -280,7 +282,6 @@ void Window::start()
         return;
     }
 
-    running = true;
     std::thread manage_thread(&Window::manage_window, this);
     manage_thread.detach();
 }
