@@ -4,6 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <unordered_map>
 
+using namespace cgame::logger;
+
 namespace cgame::input
 {
 
@@ -91,7 +93,15 @@ void setKeyPressCallback(Window& window, KeyPressCallbackMethod callback)
         return;
     }
 
-    keyCallbacks[window.getGLFWPointer()] = callback;
+    auto glfw_window_ptr = window.getGLFWPointer();
+
+    if (glfw_window_ptr == NULL)
+    {
+        log_error("window glfw pointer is null and so it can't be used to set a callback");
+        return;
+    }
+
+    keyCallbacks[glfw_window_ptr] = callback;
 
     auto callbackGLFW = [](GLFWwindow* glfw_window_ptr, int key, int scancode, int action, int mods)
     {
@@ -105,7 +115,7 @@ void setKeyPressCallback(Window& window, KeyPressCallbackMethod callback)
         callback(*window, static_cast<KeyboardKey>(key), static_cast<KeyPressAction>(action), mods);
     };
 
-    glfwSetKeyCallback(window.getGLFWPointer(), callbackGLFW);
+    glfwSetKeyCallback(glfw_window_ptr, callbackGLFW);
 }
 
 void setMousePressCallback(Window& window, MousePressCallbackMethod callback)
@@ -115,8 +125,16 @@ void setMousePressCallback(Window& window, MousePressCallbackMethod callback)
         glfwSetCursorPosCallback(window.getGLFWPointer(), NULL);
         return;
     }
+    
+    auto glfw_window_ptr = window.getGLFWPointer();
 
-    mouseButtonCallbacks[window.getGLFWPointer()] = callback;
+    if (glfw_window_ptr == NULL)
+    {
+        log_error("window glfw pointer is null and so it can't be used to set a callback");
+        return;
+    }
+
+    mouseButtonCallbacks[glfw_window_ptr] = callback;
 
     auto callbackGLFW = [](GLFWwindow* glfw_window_ptr, int button, int action, int mods)
     {
@@ -130,7 +148,7 @@ void setMousePressCallback(Window& window, MousePressCallbackMethod callback)
         callback(*window, static_cast<MouseButton>(button), static_cast<KeyPressAction>(action), mods);
     };
 
-    glfwSetMouseButtonCallback(window.getGLFWPointer(), callbackGLFW);
+    glfwSetMouseButtonCallback(glfw_window_ptr, callbackGLFW);
 }
 
 void setMouseMoveCallback(Window& window, CursorMoveCallbackMethod callback)
@@ -141,7 +159,15 @@ void setMouseMoveCallback(Window& window, CursorMoveCallbackMethod callback)
         return;
     }
 
-    cursorMoveCallbacks[window.getGLFWPointer()] = callback;
+    auto glfw_window_ptr = window.getGLFWPointer();
+
+    if (glfw_window_ptr == NULL)
+    {
+        log_error("window glfw pointer is null and so it can't be used to set a callback");
+        return;
+    }
+
+    cursorMoveCallbacks[glfw_window_ptr] = callback;
 
     auto callbackGLFW = [](GLFWwindow* glfw_window_ptr, double xPos, double yPos)
     {
@@ -173,7 +199,7 @@ void setMouseMoveCallback(Window& window, CursorMoveCallbackMethod callback)
         callback(*window, lastMousePosition, currentMousePosition);
     };
 
-    glfwSetCursorPosCallback(window.getGLFWPointer(), callbackGLFW);
+    glfwSetCursorPosCallback(glfw_window_ptr, callbackGLFW);
 }
 
 #pragma endregion
