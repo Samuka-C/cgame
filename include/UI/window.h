@@ -182,7 +182,7 @@ public:
     void queue_solid_color_object(SolidColorObject* object);
 
     /**
-     * @brief method called in a loop to render objects to the window.
+     * @brief renders all objects in the renderQueue.
      */
     virtual void render();
 
