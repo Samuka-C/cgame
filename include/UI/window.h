@@ -242,7 +242,18 @@ public:
     static bool isAnyWindowRunning();
 
     /**
-     * @brief updates and renders all running windows in a synchronized frame loop
+     * @brief updates and renders all running windows in a synchronized frame loop.
+     * 
+     * call this from the main thread inside a loop to make sure all windows are being rendered and updated.
+     * 
+     * ```
+     * while (Window::isAnyWindowRunning())
+     * {
+     *     auto time_miliseconds = Window::poll_and_render_all();
+     * 
+     *     < game loop logic goes here >
+     * }
+     * ```
      * 
      * @return the time in miliseconds for the frame
      */
