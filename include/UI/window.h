@@ -81,7 +81,7 @@ private:
     void render_window();
 
     /**
-     * @brief method called in a loop to update window logic (positions, states, etc.).
+     * @brief method that is called in a loop after the window is started until it's closed.
      * 
      * @param frameTimeMiliseconds time in miliseconds between the last call of update()
      */
