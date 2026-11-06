@@ -21,7 +21,6 @@ static std::atomic<bool> glfw_initialized = false;
 static std::atomic<bool> glad_initialized = false;
 static std::mutex glfw_window_creation_mutex;
 static std::list<Window*> allWindows = {};
-static int nanoseconds_buffer = 0;
 
 #pragma region private methods
 
@@ -456,6 +455,7 @@ bool Window::isAnyWindowRunning()
 
 int Window::poll_and_render_all()
 {
+    static int nanoseconds_buffer = 0;
     static auto lastTime = std::chrono::steady_clock::now();
     auto currentTime = std::chrono::steady_clock::now();
     
