@@ -70,50 +70,6 @@ void Window::manage_window()
     running = true;
 }
 
-void Window::poll_and_render_all()
-{
-    static auto lastTime = std::chrono::steady_clock::now();
-    auto currentTime = std::chrono::steady_clock::now();
-    
-    auto delta_time = currentTime - lastTime;
-    int time_nanoseconds = delta_time.count();
-    int time_miliseconds = time_nanoseconds / 1000000;
-
-    pollEvents();
-
-    for (auto it = allWindows.begin(); it != allWindows.end(); )
-    {
-        Window* window = *it;
-        if (!window->running || window->should_close())
-        {
-            window->close();
-            it = allWindows.erase(it);
-            continue;
-        }
-
-        // 1. Logic Update phase
-        window->update(time_miliseconds);
-
-        // 2. Render phase
-        window->reset_context();
-        window->render();
-
-        if (window->resized)
-        {
-            glViewport(0, 0, window->width, window->height);
-            window->resized = false;
-        }
-
-        // swap buffers to draw the frame
-        glfwSwapBuffers(window->glfw_window_ptr);
-
-        // next window
-        ++it;
-    }
-
-    lastTime = currentTime;
-}
-
 void Window::render_window()
 {
 }
@@ -495,6 +451,50 @@ bool Window::isAnyWindowRunning()
     }
 
     return false;
+}
+
+void Window::poll_and_render_all()
+{
+    static auto lastTime = std::chrono::steady_clock::now();
+    auto currentTime = std::chrono::steady_clock::now();
+    
+    auto delta_time = currentTime - lastTime;
+    int time_nanoseconds = delta_time.count();
+    int time_miliseconds = time_nanoseconds / 1000000;
+
+    pollEvents();
+
+    for (auto it = allWindows.begin(); it != allWindows.end(); )
+    {
+        Window* window = *it;
+        if (!window->running || window->should_close())
+        {
+            window->close();
+            it = allWindows.erase(it);
+            continue;
+        }
+
+        // 1. Logic Update phase
+        window->update(time_miliseconds);
+
+        // 2. Render phase
+        window->reset_context();
+        window->render();
+
+        if (window->resized)
+        {
+            glViewport(0, 0, window->width, window->height);
+            window->resized = false;
+        }
+
+        // swap buffers to draw the frame
+        glfwSwapBuffers(window->glfw_window_ptr);
+
+        // next window
+        ++it;
+    }
+
+    lastTime = currentTime;
 }
 
 Window* Window::getFocusedWindow()

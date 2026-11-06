@@ -189,11 +189,6 @@ public:
     virtual void render();
 
     /**
-     * @brief updates and renders all running windows in a synchronized frame loop
-     */
-    static void poll_and_render_all();
-
-    /**
      * @brief draws a color in the background of the window
      * 
      * @param red red channel of the color from 0 to 1
@@ -245,6 +240,11 @@ public:
      * @brief tells if any window (created by this class) is currently running.
      */
     static bool isAnyWindowRunning();
+
+    /**
+     * @brief updates and renders all running windows in a synchronized frame loop
+     */
+    static void poll_and_render_all();
 
     /**
      * @brief returns a pointer to the currently focused window.
