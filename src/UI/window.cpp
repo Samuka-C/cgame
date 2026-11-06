@@ -76,7 +76,7 @@ void Window::render_window()
 
 void Window::update(int frameTimeMiliseconds)
 {
-    // override this method to update window logic
+    // override this method to have the window do something every frame
 }
 
 void Window::render()
