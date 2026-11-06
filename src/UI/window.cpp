@@ -454,7 +454,7 @@ bool Window::isAnyWindowRunning()
     return false;
 }
 
-void Window::poll_and_render_all()
+int Window::poll_and_render_all()
 {
     static auto lastTime = std::chrono::steady_clock::now();
     auto currentTime = std::chrono::steady_clock::now();
@@ -497,6 +497,7 @@ void Window::poll_and_render_all()
     }
 
     lastTime = currentTime;
+    return time_miliseconds;
 }
 
 Window* Window::getFocusedWindow()

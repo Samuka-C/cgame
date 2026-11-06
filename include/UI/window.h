@@ -243,8 +243,10 @@ public:
 
     /**
      * @brief updates and renders all running windows in a synchronized frame loop
+     * 
+     * @return the time in miliseconds for the frame
      */
-    static void poll_and_render_all();
+    static int poll_and_render_all();
 
     /**
      * @brief returns a pointer to the currently focused window.
