@@ -87,8 +87,6 @@ private:
      */
     virtual void update(int frameTimeMiliseconds);
 
-
-
     /**
      * @brief tells if the window was closed.
      * 
