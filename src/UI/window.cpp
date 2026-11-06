@@ -115,7 +115,7 @@ Vec2d Window::convert_coordinates(Vec2d point)
     return Vec2d(2 * point.x / width, 2 * point.y / height);
 }
 
-void Window::draw_solid_color_object(SolidColorObject object)
+void Window::draw_solid_color_object(SolidColorObject& object)
 {
     int number_vertices = object.get_vertices().size();
 

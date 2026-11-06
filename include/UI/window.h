@@ -97,7 +97,7 @@ private:
     /**
      * @brief draws a SolidColorObject in the window
      */
-    void draw_solid_color_object(SolidColorObject object);
+    void draw_solid_color_object(SolidColorObject& object);
 
     /**
      * @brief draws a color in the background of the window
