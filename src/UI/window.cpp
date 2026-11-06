@@ -31,6 +31,8 @@ void Window::update(int frameTimeMiliseconds)
 
 void Window::render()
 {
+    draw_background(backgroundColor);
+
     for (auto objectPtr : renderQueue)
     {
         if (objectPtr)
@@ -187,18 +189,17 @@ void Window::window_change_focus(GLFWwindow* glfw_window_ptr, int focused)
 
 #pragma region constructors and destructors
 
-Window::Window(std::string title, int width, int height)
+Window::Window(std::string title, int width, int height, Color color) :
+    title(title),
+    width(width),
+    height(height),
+    backgroundColor(color),
+    glfw_window_ptr(NULL),
+    running(false),
+    resized(false),
+    coordinateMode(WindowCoordinateSystemMode::TopLeft),
+    shaderProgram(0)
 {
-    this->title = title;
-    this->width = width;
-    this->height = height;
-
-    glfw_window_ptr = nullptr;
-    running = false;
-    resized = false;
-    coordinateMode = WindowCoordinateSystemMode::TopLeft;
-    shaderProgram = 0;
-
     allWindows.push_front(this);
 }
 

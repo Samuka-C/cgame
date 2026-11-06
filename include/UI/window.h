@@ -63,6 +63,7 @@ private:
     GLuint shaderProgram;
     WindowCoordinateSystemMode coordinateMode;
     std::list<SolidColorObject*> renderQueue;
+    Color backgroundColor;
 
     #pragma endregion
 
@@ -123,7 +124,7 @@ public:
      * 
      * @attention doesn't actually start the window. for that, use start()
      */
-    Window(std::string title, int width, int height);
+    Window(std::string title, int width, int height, Color color = Color::white);
 
     ~Window();
 
