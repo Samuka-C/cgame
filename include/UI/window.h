@@ -62,22 +62,12 @@ private:
     std::atomic<bool> focused;
     GLuint shaderProgram;
     WindowCoordinateSystemMode coordinateMode;
+    std::list<SolidColorObject*> renderQueue;
+    Color backgroundColor;
 
     #pragma endregion
 
     #pragma region private methods
-
-    /**
-     * @brief function called in a special thread responsible for starting the window,
-     * starting the rendering thread, calling pollEvents() while it's running 
-     * and finally calling close() when the window is closed.
-     */
-    void manage_window();
-
-    /**
-     * @brief function called in a special thread responsible for calling update() in the window.
-     */
-    void render_window();
 
     /**
      * @brief method that is called in a loop after the window is started until it's closed.
@@ -105,6 +95,16 @@ private:
     Vec2d convert_coordinates(Vec2d point);
 
     /**
+     * @brief draws a SolidColorObject in the window
+     */
+    void draw_solid_color_object(SolidColorObject& object);
+
+    /**
+     * @brief draws a color in the background of the window
+     */
+    void draw_background(Color color);
+
+    /**
      * @brief called when the window is resized
      */
     static void window_resized(GLFWwindow* glfw_window_ptr, int width, int height);
@@ -124,7 +124,7 @@ public:
      * 
      * @attention doesn't actually start the window. for that, use start()
      */
-    Window(std::string title, int width, int height);
+    Window(std::string title, int width, int height, Color color = Color::white);
 
     ~Window();
 
@@ -166,6 +166,11 @@ public:
      */
     void set_coordinate_system(WindowCoordinateSystemMode newMode);
 
+    /**
+     * @brief changes the background color of the window
+     */
+    void set_background_color(Color color);
+
     #pragma endregion
 
     #pragma region public methods
@@ -177,17 +182,20 @@ public:
      */
     virtual void start();
 
-    void draw_solid_color_object(SolidColorObject object);
+    /**
+     * @brief adds a SolidColorObject to the rendering queue
+     */
+    void queue_solid_color_object(SolidColorObject* object);
 
     /**
-     * @brief draws a color in the background of the window
-     * 
-     * @param red red channel of the color from 0 to 1
-     * @param green red channel of the color from 0 to 1
-     * @param blue red channel of the color from 0 to 1
-     * @param alpha red channel of the color from 0 to 1
+     * @brief removes a SolidColorObject to the rendering queue
      */
-    void draw_background(Color color);
+    void dequeue_solid_color_object(SolidColorObject* object);
+
+    /**
+     * @brief renders all objects in the renderQueue.
+     */
+    virtual void render();
 
     /**
      * @brief update the values of the width and height the the current width and height of the window
@@ -231,6 +239,24 @@ public:
      * @brief tells if any window (created by this class) is currently running.
      */
     static bool isAnyWindowRunning();
+
+    /**
+     * @brief updates and renders all running windows in a synchronized frame loop.
+     * 
+     * call this from the main thread inside a loop to make sure all windows are being rendered and updated.
+     * 
+     * ```
+     * while (Window::isAnyWindowRunning())
+     * {
+     *     auto time_miliseconds = Window::poll_and_render_all();
+     * 
+     *     < game loop logic goes here >
+     * }
+     * ```
+     * 
+     * @return the time in miliseconds for the frame
+     */
+    static int poll_and_render_all();
 
     /**
      * @brief returns a pointer to the currently focused window.

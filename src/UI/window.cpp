@@ -24,96 +24,58 @@ static std::list<Window*> allWindows = {};
 
 #pragma region private methods
 
-void Window::manage_window()
+void Window::update(int frameTimeMiliseconds)
 {
-    {
-        // can't create more than window at the same time!
-        std::scoped_lock lock(glfw_window_creation_mutex);
+    // override this method to have the window do something every frame
+}
 
-        glfw_window_ptr = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+void Window::render()
+{
+    draw_background(backgroundColor);
+
+    for (auto objectPtr : renderQueue)
+    {
+        if (objectPtr)
+        {
+            draw_solid_color_object(*objectPtr);
+        }
     }
+}
 
-    if (!glfw_window_ptr)
+void Window::queue_solid_color_object(SolidColorObject* object)
+{
+    if (object == NULL)
     {
-        const char* description;
-        int code = glfwGetError(&description);
-
-        log_error(
-            "Failed to start window: %d - %s",
-            code,
-            description ? description : "Unknown error"
-        );
-
+        log_warning("Tried to add a null pointer to render queue");
         return;
     }
 
-    // sets the window object as the user pointer for the window pointer
-    glfwSetWindowUserPointer(glfw_window_ptr, this);
-
-    running = true;
-
-    std::thread loop_thread(&Window::render_window, this);
-    loop_thread.detach();
-
-    while (running)
+    if (std::find(renderQueue.begin(), renderQueue.end(), object) != renderQueue.end())
     {
-        pollEvents();
+        log_warning("Tried to add a pointer to a object already referenced in the render queue");
+        return;
     }
 
-    close();
+    renderQueue.push_back(object);
 }
 
-void Window::render_window()
+void Window::dequeue_solid_color_object(SolidColorObject* object)
 {
-    auto lastTime = std::chrono::steady_clock::now();
-    int nanoseconds_buffer = 0;
-
-    reset_context();
-
-    glfwSetFramebufferSizeCallback(
-        glfw_window_ptr,
-        window_resized
-    );
-
-    glfwSetWindowFocusCallback(
-        glfw_window_ptr,
-        window_change_focus
-    );
-
-    auto vertexShader = loadShader(std::format("{}/src/UI/shaders/vertexShader.glsl", CGAME_ROOT), GL_VERTEX_SHADER);
-    auto fragmentShader  = loadShader(std::format("{}/src/UI/shaders/fragmentShader.glsl", CGAME_ROOT), GL_FRAGMENT_SHADER);
-
-    shaderProgram = assembleShaderProgram({vertexShader, fragmentShader});
-
-    while (!this->should_close())
+    if (object == NULL)
     {
-        auto currentTime = std::chrono::steady_clock::now();
-        
-        auto delta_time = currentTime - lastTime;
-        int time_nanoseconds = delta_time.count() + nanoseconds_buffer;
-        int time_miliseconds = time_nanoseconds / 1000000;
-        nanoseconds_buffer = time_nanoseconds - time_miliseconds * 1000000;
-
-        update(time_miliseconds);
-
-        if (resized)
-        {
-            glViewport(0, 0, width, height);
-            resized = false;
-        }
-
-        // swap buffers to draw the frame
-        glfwSwapBuffers(glfw_window_ptr);
-
-        lastTime = currentTime;
+        log_warning("Tried to remove a null pointer to render queue");
+        return;
     }
 
-    running = false;
-}
+    auto it = std::find(renderQueue.begin(), renderQueue.end(), object);
 
-void Window::update(int frameTimeMiliseconds)
-{
-    // override this method to make it do something
+    if (it == renderQueue.end())
+    {
+        log_warning("Tried to remove a pointer to a object not referenced in the render queue");
+        return;
+    }
+
+    renderQueue.erase(it);
 }
 
 bool Window::should_close()
@@ -153,6 +115,87 @@ Vec2d Window::convert_coordinates(Vec2d point)
     return Vec2d(2 * point.x / width, 2 * point.y / height);
 }
 
+void Window::draw_solid_color_object(SolidColorObject& object)
+{
+    int number_vertices = object.get_vertices().size();
+
+    double vertices[2 * number_vertices]; // each vertice has 2 doubles
+    int index = 0;
+    for (auto vertex : object.get_vertices())
+    {
+        auto ndcVertex = convert_coordinates(vertex);
+
+        vertices[index++] = ndcVertex.x;
+        vertices[index++] = ndcVertex.y;
+    }
+
+    unsigned int VertexArrayObjectId, VertexBufferObjectId;
+
+    // generate the Vertex Array Object
+    glGenVertexArrays(1, &VertexArrayObjectId);
+
+    // select current Vertex Array Object
+    glBindVertexArray(VertexArrayObjectId);
+
+    // generate the Vertex Buffer Object
+    glGenBuffers(1, &VertexBufferObjectId);
+
+    // select current Vertex Buffer Object
+    glBindBuffer(GL_ARRAY_BUFFER, VertexBufferObjectId);
+
+    // use the vertex and fragment shader
+    glUseProgram(shaderProgram);
+
+    // set the color in the fragment shader
+    auto colorLocation = glGetUniformLocation(shaderProgram, "fragmentColor");
+
+    glUniform4f(
+        colorLocation, 
+        object.get_color().get_red_float(),
+        object.get_color().get_green_float(),
+        object.get_color().get_blue_float(),
+        object.get_color().get_alpha_float()
+    );
+
+    // load vertices in VBO
+    glBufferData(
+        GL_ARRAY_BUFFER, 
+        sizeof(vertices), 
+        vertices, 
+        GL_STATIC_DRAW
+    );
+
+    // tell GL how to read the vertices
+    glVertexAttribPointer(
+        0,                 // attribute location
+        2,                 // 2 coordinates per vertice, x and y
+        GL_DOUBLE,         // vertices are double
+        GL_FALSE,          // normalization
+        2 * sizeof(double),// size of each vertice
+        nullptr            // offset
+    );
+
+    // enable attribute location
+    glEnableVertexAttribArray(0);
+
+    // draw thw triangles
+    glDrawArrays(GL_TRIANGLES, 0, number_vertices);
+
+    // delete the VBO and VAO
+    glDeleteBuffers(1, &VertexBufferObjectId);
+    glDeleteVertexArrays(1, &VertexArrayObjectId);
+}
+
+void Window::draw_background(Color color)
+{
+    glClearColor(
+        color.get_red_float(), 
+        color.get_green_float(), 
+        color.get_blue_float(), 
+        color.get_alpha_float());
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
 void Window::window_resized(GLFWwindow* glfw_window_ptr, int width, int height)
 {
     Window* window = static_cast<Window*>(glfwGetWindowUserPointer(glfw_window_ptr));
@@ -174,18 +217,17 @@ void Window::window_change_focus(GLFWwindow* glfw_window_ptr, int focused)
 
 #pragma region constructors and destructors
 
-Window::Window(std::string title, int width, int height)
+Window::Window(std::string title, int width, int height, Color color) :
+    title(title),
+    width(width),
+    height(height),
+    backgroundColor(color),
+    glfw_window_ptr(NULL),
+    running(false),
+    resized(false),
+    coordinateMode(WindowCoordinateSystemMode::TopLeft),
+    shaderProgram(0)
 {
-    this->title = title;
-    this->width = width;
-    this->height = height;
-
-    glfw_window_ptr = nullptr;
-    running = false;
-    resized = false;
-    coordinateMode = WindowCoordinateSystemMode::TopLeft;
-    shaderProgram = 0;
-
     allWindows.push_front(this);
 }
 
@@ -271,6 +313,11 @@ void Window::set_coordinate_system(WindowCoordinateSystemMode newMode)
     coordinateMode = newMode;
 }
 
+void Window::set_background_color(Color color)
+{
+    backgroundColor = color;
+}
+
 #pragma endregion
 
 #pragma region public methods
@@ -283,89 +330,48 @@ void Window::start()
         return;
     }
 
-    std::thread manage_thread(&Window::manage_window, this);
-    manage_thread.detach();
-}
-
-void Window::draw_solid_color_object(SolidColorObject object)
-{
-    int number_vertices = object.get_vertices().size();
-
-    double vertices[2 * number_vertices]; // each vertice has 2 doubles
-    int index = 0;
-    for (auto vertex : object.get_vertices())
     {
-        auto ndcVertex = convert_coordinates(vertex);
+        // can't create more than window at the same time!
+        std::scoped_lock lock(glfw_window_creation_mutex);
 
-        vertices[index++] = ndcVertex.x;
-        vertices[index++] = ndcVertex.y;
+        glfw_window_ptr = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
     }
 
-    unsigned int VertexArrayObjectId, VertexBufferObjectId;
+    if (!glfw_window_ptr)
+    {
+        const char* description;
+        int code = glfwGetError(&description);
 
-    // generate the Vertex Array Object
-    glGenVertexArrays(1, &VertexArrayObjectId);
+        log_error(
+            "Failed to start window: %d - %s",
+            code,
+            description ? description : "Unknown error"
+        );
 
-    // select current Vertex Array Object
-    glBindVertexArray(VertexArrayObjectId);
+        return;
+    }
 
-    // generate the Vertex Buffer Object
-    glGenBuffers(1, &VertexBufferObjectId);
+    // sets the window object as the user pointer for the window pointer
+    glfwSetWindowUserPointer(glfw_window_ptr, this);
 
-    // select current Vertex Buffer Object
-    glBindBuffer(GL_ARRAY_BUFFER, VertexBufferObjectId);
-
-    // use the vertex and fragment shader
-    glUseProgram(shaderProgram);
-
-    // set the color in the fragment shader
-    auto colorLocation = glGetUniformLocation(shaderProgram, "fragmentColor");
-
-    glUniform4f(
-        colorLocation, 
-        object.get_color().get_red_float(),
-        object.get_color().get_green_float(),
-        object.get_color().get_blue_float(),
-        object.get_color().get_alpha_float()
+    glfwSetFramebufferSizeCallback(
+        glfw_window_ptr,
+        window_resized
     );
 
-    // load vertices in VBO
-    glBufferData(
-        GL_ARRAY_BUFFER, 
-        sizeof(vertices), 
-        vertices, 
-        GL_STATIC_DRAW
+    glfwSetWindowFocusCallback(
+        glfw_window_ptr,
+        window_change_focus
     );
 
-    // tell GL how to read the vertices
-    glVertexAttribPointer(
-        0,                 // attribute location
-        2,                 // 2 coordinates per vertice, x and y
-        GL_DOUBLE,         // vertices are double
-        GL_FALSE,          // normalization
-        2 * sizeof(double),// size of each vertice
-        nullptr            // offset
-    );
+    reset_context();
 
-    // enable attribute location
-    glEnableVertexAttribArray(0);
+    auto vertexShader = loadShader(std::format("{}/src/UI/shaders/vertexShader.glsl", CGAME_ROOT), GL_VERTEX_SHADER);
+    auto fragmentShader  = loadShader(std::format("{}/src/UI/shaders/fragmentShader.glsl", CGAME_ROOT), GL_FRAGMENT_SHADER);
 
-    // draw thw triangles
-    glDrawArrays(GL_TRIANGLES, 0, number_vertices);
+    shaderProgram = assembleShaderProgram({vertexShader, fragmentShader});
 
-    // delete the VBO and VAO
-    glDeleteBuffers(1, &VertexBufferObjectId);
-    glDeleteVertexArrays(1, &VertexArrayObjectId);
-}
-
-void Window::draw_background(Color color)
-{
-    glClearColor(
-        color.get_red_float(), 
-        color.get_green_float(), 
-        color.get_blue_float(), 
-        color.get_alpha_float());
-    glClear(GL_COLOR_BUFFER_BIT);
+    running = true;
 }
 
 void Window::update_width_height()
@@ -375,8 +381,13 @@ void Window::update_width_height()
 
 void Window::close()
 {
-    glfwDestroyWindow(glfw_window_ptr);
-    glfw_window_ptr = nullptr;
+    renderQueue.clear();
+    if (glfw_window_ptr)
+    {
+        glfwDestroyWindow(glfw_window_ptr);
+        glfw_window_ptr = nullptr;
+    }
+    running = false;
 }
 
 #pragma endregion
@@ -465,6 +476,53 @@ bool Window::isAnyWindowRunning()
     }
 
     return false;
+}
+
+int Window::poll_and_render_all()
+{
+    static int nanoseconds_buffer = 0;
+    static auto lastTime = std::chrono::steady_clock::now();
+    auto currentTime = std::chrono::steady_clock::now();
+    
+    auto delta_time = currentTime - lastTime;
+    int time_nanoseconds = delta_time.count() + nanoseconds_buffer;
+    int time_miliseconds = time_nanoseconds / 1000000;
+    nanoseconds_buffer = time_nanoseconds - time_miliseconds * 1000000;
+
+    pollEvents();
+
+    for (auto it = allWindows.begin(); it != allWindows.end(); )
+    {
+        Window* window = *it;
+        if (!window->running || window->should_close())
+        {
+            window->close();
+            it = allWindows.erase(it);
+            continue;
+        }
+
+        // 1. Logic Update phase
+        window->update(time_miliseconds);
+
+        // 2. Render phase
+        window->reset_context();
+        window->render();
+
+        if (window->resized)
+        {
+            glViewport(0, 0, window->width, window->height);
+            window->resized = false;
+        }
+
+        // swap buffers to draw the frame
+        glfwSwapBuffers(window->glfw_window_ptr);
+
+        // next window
+        ++it;
+    }
+
+    lastTime = currentTime;
+    return time_miliseconds;
 }
 
 Window* Window::getFocusedWindow()
