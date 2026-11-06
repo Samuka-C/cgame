@@ -44,10 +44,38 @@ void Window::render()
 
 void Window::queue_solid_color_object(SolidColorObject* object)
 {
-    if (object)
+    if (object == NULL)
     {
-        renderQueue.push_back(object);
+        log_warning("Tried to add a null pointer to render queue");
+        return;
     }
+
+    if (std::find(renderQueue.begin(), renderQueue.end(), object) != renderQueue.end())
+    {
+        log_warning("Tried to add a pointer to a object already referenced in the render queue");
+        return;
+    }
+
+    renderQueue.push_back(object);
+}
+
+void Window::dequeue_solid_color_object(SolidColorObject* object)
+{
+    if (object == NULL)
+    {
+        log_warning("Tried to remove a null pointer to render queue");
+        return;
+    }
+
+    auto it = std::find(renderQueue.begin(), renderQueue.end(), object);
+
+    if (it == renderQueue.end())
+    {
+        log_warning("Tried to remove a pointer to a object not referenced in the render queue");
+        return;
+    }
+
+    renderQueue.erase(it);
 }
 
 bool Window::should_close()

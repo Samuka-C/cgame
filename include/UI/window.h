@@ -188,6 +188,11 @@ public:
     void queue_solid_color_object(SolidColorObject* object);
 
     /**
+     * @brief removes a SolidColorObject to the rendering queue
+     */
+    void dequeue_solid_color_object(SolidColorObject* object);
+
+    /**
      * @brief renders all objects in the renderQueue.
      */
     virtual void render();
