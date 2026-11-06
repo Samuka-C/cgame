@@ -62,6 +62,7 @@ private:
     std::atomic<bool> focused;
     GLuint shaderProgram;
     WindowCoordinateSystemMode coordinateMode;
+    std::list<SolidColorObject*> renderQueue;
 
     #pragma endregion
 
@@ -80,11 +81,13 @@ private:
     void render_window();
 
     /**
-     * @brief method that is called in a loop after the window is started until it's closed.
+     * @brief method called in a loop to update window logic (positions, states, etc.).
      * 
      * @param frameTimeMiliseconds time in miliseconds between the last call of update()
      */
     virtual void update(int frameTimeMiliseconds);
+
+
 
     /**
      * @brief tells if the window was closed.
@@ -178,6 +181,17 @@ public:
     virtual void start();
 
     void draw_solid_color_object(SolidColorObject object);
+    void queue_solid_color_object(SolidColorObject* object);
+
+    /**
+     * @brief method called in a loop to render objects to the window.
+     */
+    virtual void render();
+
+    /**
+     * @brief updates and renders all running windows in a synchronized frame loop
+     */
+    static void poll_and_render_all();
 
     /**
      * @brief draws a color in the background of the window

@@ -50,26 +50,6 @@ void Window::manage_window()
     // sets the window object as the user pointer for the window pointer
     glfwSetWindowUserPointer(glfw_window_ptr, this);
 
-    running = true;
-
-    std::thread loop_thread(&Window::render_window, this);
-    loop_thread.detach();
-
-    while (running)
-    {
-        pollEvents();
-    }
-
-    close();
-}
-
-void Window::render_window()
-{
-    auto lastTime = std::chrono::steady_clock::now();
-    int nanoseconds_buffer = 0;
-
-    reset_context();
-
     glfwSetFramebufferSizeCallback(
         glfw_window_ptr,
         window_resized
@@ -80,40 +60,83 @@ void Window::render_window()
         window_change_focus
     );
 
+    reset_context();
+
     auto vertexShader = loadShader(std::format("{}/src/UI/shaders/vertexShader.glsl", CGAME_ROOT), GL_VERTEX_SHADER);
     auto fragmentShader  = loadShader(std::format("{}/src/UI/shaders/fragmentShader.glsl", CGAME_ROOT), GL_FRAGMENT_SHADER);
 
     shaderProgram = assembleShaderProgram({vertexShader, fragmentShader});
 
-    while (!this->should_close())
+    running = true;
+}
+
+void Window::poll_and_render_all()
+{
+    static auto lastTime = std::chrono::steady_clock::now();
+    auto currentTime = std::chrono::steady_clock::now();
+    
+    auto delta_time = currentTime - lastTime;
+    int time_nanoseconds = delta_time.count();
+    int time_miliseconds = time_nanoseconds / 1000000;
+
+    pollEvents();
+
+    for (auto it = allWindows.begin(); it != allWindows.end(); )
     {
-        auto currentTime = std::chrono::steady_clock::now();
-        
-        auto delta_time = currentTime - lastTime;
-        int time_nanoseconds = delta_time.count() + nanoseconds_buffer;
-        int time_miliseconds = time_nanoseconds / 1000000;
-        nanoseconds_buffer = time_nanoseconds - time_miliseconds * 1000000;
-
-        update(time_miliseconds);
-
-        if (resized)
+        Window* window = *it;
+        if (!window->running || window->should_close())
         {
-            glViewport(0, 0, width, height);
-            resized = false;
+            window->close();
+            it = allWindows.erase(it);
+            continue;
         }
 
-        // swap buffers to draw the frame
-        glfwSwapBuffers(glfw_window_ptr);
+        // 1. Logic Update phase
+        window->update(time_miliseconds);
 
-        lastTime = currentTime;
+        // 2. Render phase
+        window->reset_context();
+        window->render();
+
+        if (window->resized)
+        {
+            glViewport(0, 0, window->width, window->height);
+            window->resized = false;
+        }
+
+        glfwSwapBuffers(window->glfw_window_ptr);
+        ++it;
     }
 
-    running = false;
+    lastTime = currentTime;
+}
+
+void Window::render_window()
+{
 }
 
 void Window::update(int frameTimeMiliseconds)
 {
-    // override this method to make it do something
+    // override this method to update window logic
+}
+
+void Window::render()
+{
+    for (auto objectPtr : renderQueue)
+    {
+        if (objectPtr)
+        {
+            draw_solid_color_object(*objectPtr);
+        }
+    }
+}
+
+void Window::queue_solid_color_object(SolidColorObject* object)
+{
+    if (object)
+    {
+        renderQueue.push_back(object);
+    }
 }
 
 bool Window::should_close()
@@ -283,8 +306,7 @@ void Window::start()
         return;
     }
 
-    std::thread manage_thread(&Window::manage_window, this);
-    manage_thread.detach();
+    manage_window();
 }
 
 void Window::draw_solid_color_object(SolidColorObject object)
@@ -375,8 +397,13 @@ void Window::update_width_height()
 
 void Window::close()
 {
-    glfwDestroyWindow(glfw_window_ptr);
-    glfw_window_ptr = nullptr;
+    renderQueue.clear();
+    if (glfw_window_ptr)
+    {
+        glfwDestroyWindow(glfw_window_ptr);
+        glfw_window_ptr = nullptr;
+    }
+    running = false;
 }
 
 #pragma endregion
