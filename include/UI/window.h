@@ -94,6 +94,16 @@ private:
     Vec2d convert_coordinates(Vec2d point);
 
     /**
+     * @brief draws a SolidColorObject in the window
+     */
+    void draw_solid_color_object(SolidColorObject object);
+
+    /**
+     * @brief draws a color in the background of the window
+     */
+    void draw_background(Color color);
+
+    /**
      * @brief called when the window is resized
      */
     static void window_resized(GLFWwindow* glfw_window_ptr, int width, int height);
@@ -166,23 +176,15 @@ public:
      */
     virtual void start();
 
-    void draw_solid_color_object(SolidColorObject object);
+    /**
+     * @brief adds a SolidColorObject to the rendering queue
+     */
     void queue_solid_color_object(SolidColorObject* object);
 
     /**
      * @brief renders all objects in the renderQueue.
      */
     virtual void render();
-
-    /**
-     * @brief draws a color in the background of the window
-     * 
-     * @param red red channel of the color from 0 to 1
-     * @param green red channel of the color from 0 to 1
-     * @param blue red channel of the color from 0 to 1
-     * @param alpha red channel of the color from 0 to 1
-     */
-    void draw_background(Color color);
 
     /**
      * @brief update the values of the width and height the the current width and height of the window
