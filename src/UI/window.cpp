@@ -285,6 +285,11 @@ void Window::set_coordinate_system(WindowCoordinateSystemMode newMode)
     coordinateMode = newMode;
 }
 
+void Window::set_background_color(Color color)
+{
+    backgroundColor = color;
+}
+
 #pragma endregion
 
 #pragma region public methods

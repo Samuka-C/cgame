@@ -166,6 +166,11 @@ public:
      */
     void set_coordinate_system(WindowCoordinateSystemMode newMode);
 
+    /**
+     * @brief changes the background color of the window
+     */
+    void set_background_color(Color color);
+
     #pragma endregion
 
     #pragma region public methods
