@@ -69,18 +69,6 @@ private:
     #pragma region private methods
 
     /**
-     * @brief function called in a special thread responsible for starting the window,
-     * starting the rendering thread, calling pollEvents() while it's running 
-     * and finally calling close() when the window is closed.
-     */
-    void manage_window();
-
-    /**
-     * @brief function called in a special thread responsible for calling update() in the window.
-     */
-    void render_window();
-
-    /**
      * @brief method that is called in a loop after the window is started until it's closed.
      * 
      * @param frameTimeMiliseconds time in miliseconds between the last call of update()

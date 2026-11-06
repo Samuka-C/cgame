@@ -24,56 +24,6 @@ static std::list<Window*> allWindows = {};
 
 #pragma region private methods
 
-void Window::manage_window()
-{
-    {
-        // can't create more than window at the same time!
-        std::scoped_lock lock(glfw_window_creation_mutex);
-
-        glfw_window_ptr = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
-    }
-
-    if (!glfw_window_ptr)
-    {
-        const char* description;
-        int code = glfwGetError(&description);
-
-        log_error(
-            "Failed to start window: %d - %s",
-            code,
-            description ? description : "Unknown error"
-        );
-
-        return;
-    }
-
-    // sets the window object as the user pointer for the window pointer
-    glfwSetWindowUserPointer(glfw_window_ptr, this);
-
-    glfwSetFramebufferSizeCallback(
-        glfw_window_ptr,
-        window_resized
-    );
-
-    glfwSetWindowFocusCallback(
-        glfw_window_ptr,
-        window_change_focus
-    );
-
-    reset_context();
-
-    auto vertexShader = loadShader(std::format("{}/src/UI/shaders/vertexShader.glsl", CGAME_ROOT), GL_VERTEX_SHADER);
-    auto fragmentShader  = loadShader(std::format("{}/src/UI/shaders/fragmentShader.glsl", CGAME_ROOT), GL_FRAGMENT_SHADER);
-
-    shaderProgram = assembleShaderProgram({vertexShader, fragmentShader});
-
-    running = true;
-}
-
-void Window::render_window()
-{
-}
-
 void Window::update(int frameTimeMiliseconds)
 {
     // override this method to have the window do something every frame
@@ -265,7 +215,48 @@ void Window::start()
         return;
     }
 
-    manage_window();
+    {
+        // can't create more than window at the same time!
+        std::scoped_lock lock(glfw_window_creation_mutex);
+
+        glfw_window_ptr = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+    }
+
+    if (!glfw_window_ptr)
+    {
+        const char* description;
+        int code = glfwGetError(&description);
+
+        log_error(
+            "Failed to start window: %d - %s",
+            code,
+            description ? description : "Unknown error"
+        );
+
+        return;
+    }
+
+    // sets the window object as the user pointer for the window pointer
+    glfwSetWindowUserPointer(glfw_window_ptr, this);
+
+    glfwSetFramebufferSizeCallback(
+        glfw_window_ptr,
+        window_resized
+    );
+
+    glfwSetWindowFocusCallback(
+        glfw_window_ptr,
+        window_change_focus
+    );
+
+    reset_context();
+
+    auto vertexShader = loadShader(std::format("{}/src/UI/shaders/vertexShader.glsl", CGAME_ROOT), GL_VERTEX_SHADER);
+    auto fragmentShader  = loadShader(std::format("{}/src/UI/shaders/fragmentShader.glsl", CGAME_ROOT), GL_FRAGMENT_SHADER);
+
+    shaderProgram = assembleShaderProgram({vertexShader, fragmentShader});
+
+    running = true;
 }
 
 void Window::draw_solid_color_object(SolidColorObject object)
