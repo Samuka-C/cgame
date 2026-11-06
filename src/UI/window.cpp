@@ -104,7 +104,10 @@ void Window::poll_and_render_all()
             window->resized = false;
         }
 
+        // swap buffers to draw the frame
         glfwSwapBuffers(window->glfw_window_ptr);
+
+        // next window
         ++it;
     }
 
